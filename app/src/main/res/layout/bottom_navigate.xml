@@ -1,15 +1,16 @@
 <!-- bottom_navigation.xml -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Other content can be placed above the bottom navigation bar -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"/> <!-- to leave space for the nav bar -->
+        android:layout_marginBottom="56dp"
+        /> <!-- to leave space for the nav bar -->
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -17,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_navigation_menu" /> <!-- The menu resource for the navigation items -->
+        android:background="@drawable/bottom_navigation_layer"
+        app:menu="@menu/bottom_navigate_menu" /> <!-- The menu resource for the navigation items -->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

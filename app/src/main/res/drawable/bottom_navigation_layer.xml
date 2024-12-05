@@ -1,0 +1,16 @@
+<!-- res/drawable/bottom_navigation_layer.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom border layer -->
+    <item>
+        <shape>
+            <solid android:color="@color/layer_cream"/>
+            <stroke android:color="@color/grey" android:width="1px"/>
+        </shape>
+    </item>
+    <!-- Background layer -->
+    <item  android:top="2dp">
+        <shape>
+            <solid android:color="@color/layer_cream"/>
+        </shape>
+    </item>
+</layer-list>
