@@ -24,6 +24,7 @@
                 android:id="@+id/frame"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
+                android:contentDescription="Touch space of return"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -47,7 +48,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/create_acc"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -125,7 +126,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="3dp"
             android:background="@drawable/round_corner_bg"
-            android:drawableLeft="@drawable/ic_password"
+            android:drawableLeft="@drawable/ic_lock"
             android:drawablePadding="15dp"
             android:gravity="center_vertical"
             android:hint="Password"
@@ -140,7 +141,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="3dp"
             android:background="@drawable/round_corner_bg"
-            android:drawableLeft="@drawable/ic_password"
+            android:drawableLeft="@drawable/ic_lock"
             android:drawablePadding="15dp"
             android:gravity="center_vertical"
             android:hint="Confirm password"
