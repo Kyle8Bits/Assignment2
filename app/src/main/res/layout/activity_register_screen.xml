@@ -21,6 +21,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
+                android:id="@+id/frame"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -240,6 +241,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text="Please provided your medical condition or you can provide it later"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            tools:paddingLeft="10dp" />
+
+        <Spinner
+            android:id="@+id/bloodTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_corner_bg"
+            android:contentDescription="Blood Type selection"
+            android:importantForAccessibility="yes" />
+    </LinearLayout>
 
 </LinearLayout>
