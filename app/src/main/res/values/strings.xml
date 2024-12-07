@@ -20,5 +20,6 @@
         <item>O+</item>
         <item>O-</item>
     </string-array>
+    <string name="title_activity_booking_map">BookingMap</string>
 
 </resources>
