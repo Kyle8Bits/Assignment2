@@ -6,6 +6,7 @@ public class DonateRegister {
     private String userID;
     private String status;
     private String timeRegister;
+    private String dateRegister;
     private String bloodType;
     private double donationAmount = 0;
     private String lastName;
@@ -14,11 +15,12 @@ public class DonateRegister {
     private String governmentID;
     public DonateRegister() {}
 
-    public DonateRegister(String donateSiteId, String userID, String timeRegister, String bloodType, String lastName, String firstName, String dob, String governmentID) {
+    public DonateRegister(String donateSiteId, String userID, String timeRegister, String dateRegister, String bloodType, String lastName, String firstName, String dob, String governmentID) {
         this.donateSiteId = donateSiteId;
         this.userID = userID;
         this.status = "On process";
         this.timeRegister = timeRegister;
+        this.dateRegister = dateRegister;
         this.bloodType = bloodType;
         this.donationAmount = 0;
         this.lastName = lastName;
@@ -54,6 +56,10 @@ public class DonateRegister {
     public String getTimeRegister() {
         return timeRegister;
     }
+
+    public String getDateRegister() {return dateRegister;}
+
+    public void setDateRegister(String dateRegister) {this.dateRegister = dateRegister;}
 
     public void setTimeRegister(String timeRegister) {
         this.timeRegister = timeRegister;

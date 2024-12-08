@@ -6,13 +6,15 @@ public class VolunteerRegister {
     private String userID;
     private String donateSiteId;
     private String status = "On Process";
+    private String dateRegister;
     private String timeRegister;
     public VolunteerRegister() {}
 
-    public VolunteerRegister(String userID, String donateSiteId, String timeRegister) {
+    public VolunteerRegister(String userID, String donateSiteId,  String dateRegister,String timeRegister) {
         this.userID = userID;
         this.donateSiteId = donateSiteId;
         this.status = "Registered";
+        this.dateRegister = dateRegister;
         this.timeRegister = timeRegister;
     }
 
@@ -24,6 +26,9 @@ public class VolunteerRegister {
         this.timeRegister = timeRegister;
     }
 
+    public String getDateRegister() {return dateRegister;}
+
+    public void setDateRegister(String dateRegister) {this.dateRegister = dateRegister;}
     public String getStatus() {
         return status;
     }

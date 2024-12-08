@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-
-    android:padding="10dp"
     android:layout_margin="10dp"
-    android:background="@drawable/round_corner_bg">
+    android:background="@drawable/round_corner_bg"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/roboto_bold"
-            android:text="Donate site:"
+            android:text="Volunteer location:"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -58,61 +55,36 @@
             android:textColor="@color/red" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Blood amount:"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/bloodAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
-            android:text="350 mL"
-            android:textColor="@color/red" />
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/red_line"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@drawable/red_line"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_constraintBottom_toBottomOf="parent" />
+            tools:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/red_line" />
 
         <ImageView
             android:id="@+id/green_line"
-            android:layout_width="150dp"
-            android:layout_height="3dp"
-            android:background="@drawable/green_line"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_constraintEnd_toEndOf="parent" />
+            tools:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="150dp"
+            android:layout_height="3dp"
+            android:background="@drawable/green_line" />
 
         <ImageView
             android:id="@+id/dark_red_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="130dp"
             android:layout_height="3dp"
-            android:background="@drawable/darkred_line"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:background="@drawable/darkred_line" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -125,13 +97,14 @@
 
         <TextView
             android:id="@+id/textView4"
+            tools:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/roboto_bold"
             android:text="Status:"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            tools:layout_weight="1" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/status"
@@ -151,15 +124,6 @@
         android:visibility="gone">
 
         <Button
-            android:id="@+id/editButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:text="Edit" />
-
-        <Button
             android:id="@+id/cancleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -167,5 +131,4 @@
             android:layout_weight="1"
             android:text="Cancle" />
     </LinearLayout>
-
 </LinearLayout>

@@ -10,6 +10,7 @@ public class DonateSite {
     private double longitude;
     private String phone;
     private String managerUID;
+    private String date;
 
     private String status = "Open Register";
     private List<String> donationRegisterIds = new ArrayList<>();
@@ -29,13 +30,14 @@ public class DonateSite {
 
     }
 
-    public DonateSite(String name, String address, double latitude, double longitude, String phone, String managerUID, String status, List<String> donationRegisterIds, String donationStartTime, String donationEndTime, double a_positive, double b_positive, double o_positive, double AB_positive, double a_negative, double b_negative, double o_negative, double AB_negative) {
+    public DonateSite(String name, String address, double latitude, double longitude, String phone, String managerUID,String date, String status, List<String> donationRegisterIds, String donationStartTime, String donationEndTime, double a_positive, double b_positive, double o_positive, double AB_positive, double a_negative, double b_negative, double o_negative, double AB_negative) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
         this.phone = phone;
         this.managerUID = managerUID;
+        this.date =  date;
         this.status = status;
         this.donationRegisterIds = donationRegisterIds;
         this.donationStartTime = donationStartTime;
@@ -149,6 +151,10 @@ public class DonateSite {
     public void setDonationStartTime(String donationStartTime) {
         this.donationStartTime = donationStartTime;
     }
+
+    public String getDate() {return date;}
+
+    public void setDate(String date) {this.date = date;}
 
     public String getDonationEndTime() {
         return donationEndTime;
