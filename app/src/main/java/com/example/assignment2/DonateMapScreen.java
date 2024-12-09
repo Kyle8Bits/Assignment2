@@ -65,14 +65,10 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         client = LocationServices.getFusedLocationProviderClient(this);
         LatLng RMIT = new LatLng(  10.72933983229157, 106.69585581177428);
 
-        LatLng nextDoor = new LatLng(10.729613905175064, 106.6927444493415);
-        mMap.addMarker(new MarkerOptions().position(nextDoor).title("Marker electrical")
+        mMap.addMarker(new MarkerOptions().position(RMIT).title("Marker electrical")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 
-        mMap.addMarker(new MarkerOptions().position(RMIT).title("Marker RMIT")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(RMIT, 17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(RMIT, 15));
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);

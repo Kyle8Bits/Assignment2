@@ -109,7 +109,7 @@
                             android:id="@+id/imageView2"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            tools:srcCompat="@drawable/blood_drop" />
+                            android:src="@drawable/blood_icon" />
 
                         <TextView
                             android:id="@+id/textView4"
@@ -154,7 +154,7 @@
                             android:id="@+id/imageView3"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            tools:srcCompat="@drawable/hand_up" />
+                            android:src="@drawable/hand_up" />
 
                         <TextView
                             android:id="@+id/textView7"
