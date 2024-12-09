@@ -258,7 +258,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView12"
+                        android:id="@+id/userBloodType"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_weight="1"

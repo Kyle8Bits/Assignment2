@@ -65,17 +65,18 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         client = LocationServices.getFusedLocationProviderClient(this);
         LatLng RMIT = new LatLng(  10.72933983229157, 106.69585581177428);
 
-        mMap.addMarker(new MarkerOptions().position(RMIT).title("Marker in Sydney")
+        LatLng nextDoor = new LatLng(10.729613905175064, 106.6927444493415);
+        mMap.addMarker(new MarkerOptions().position(nextDoor).title("Marker electrical")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(RMIT, 15));
+        mMap.addMarker(new MarkerOptions().position(RMIT).title("Marker RMIT")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(RMIT, 17));
 
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(RMIT));
-
     }
 
     @SuppressLint("MissingPermission")
