@@ -21,5 +21,6 @@
         <item>O-</item>
     </string-array>
     <string name="title_activity_booking_map">BookingMap</string>
+    <string name="title_activity_donate_map_screen">DonateMapScreen</string>
 
 </resources>

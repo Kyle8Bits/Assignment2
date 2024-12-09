@@ -6,15 +6,11 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -22,31 +18,35 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import android.location.Location;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.assignment2.databinding.ActivityBookingMapBinding;
+import com.example.assignment2.databinding.ActivityDonateMapScreenBinding;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class BookingMap extends FragmentActivity implements OnMapReadyCallback {
+public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ActivityBookingMapBinding binding;
-    protected FusedLocationProviderClient client;
+    private ActivityDonateMapScreenBinding binding;
+    private FusedLocationProviderClient client;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityBookingMapBinding.inflate(getLayoutInflater());
+        binding = ActivityDonateMapScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        setupFooter();
     }
 
     /**
@@ -62,36 +62,20 @@ public class BookingMap extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if(requestPermission()){
-            getPosition();
-        }
         client = LocationServices.getFusedLocationProviderClient(this);
+        LatLng RMIT = new LatLng(  10.72933983229157, 106.69585581177428);
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney")
+        mMap.addMarker(new MarkerOptions().position(RMIT).title("Marker in Sydney")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 12));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(RMIT, 15));
 
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(RMIT));
 
-        Bitmap bitmap = Bitmap.createBitmap(200,50,Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawText("Welcome", 30, 40, paint);
-
-        mMap.addMarker(new MarkerOptions().position(sydney).title("hello").icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
-
-        getPosition();
     }
 
     @SuppressLint("MissingPermission")
@@ -107,21 +91,20 @@ public class BookingMap extends FragmentActivity implements OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
 
 
-                Toast.makeText(BookingMap.this,location.getLatitude()+"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DonateMapScreen.this,location.getLatitude()+"", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private boolean requestPermission(){
-        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+    public void requestPermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
-            return true;
+
         }
-        return false;
     }
 
     @Override
@@ -136,5 +119,33 @@ public class BookingMap extends FragmentActivity implements OnMapReadyCallback {
                 Toast.makeText(this,"Permission denied!", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void setupFooter() {
+        ImageButton homeNav, bookNav, profileNav;
+
+        homeNav = findViewById(R.id.homeNav);
+        bookNav = findViewById(R.id.bookingNav);
+        profileNav = findViewById(R.id.profileNav);
+
+
+
+        homeNav.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+
+        profileNav.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DonateMapScreen.this, ProfileScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 }
