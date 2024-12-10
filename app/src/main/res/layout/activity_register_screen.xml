@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_cream"
     android:orientation="vertical"
-    tools:context=".RegisterScreen">
+    tools:context=".main_screen.RegisterScreen">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

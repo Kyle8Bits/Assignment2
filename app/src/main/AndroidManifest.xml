@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment2"
         tools:targetApi="31">
-
+        <activity
+            android:name=".list_screen.VolunteerRecord"
+            android:exported="false" />
+        <activity
+            android:name=".list_screen.DonationRecord"
+            android:exported="false" />
+        <activity
+            android:name=".main_screen.ManagerScreen"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -33,14 +40,14 @@
             android:value="AIzaSyAmYG0ewlmb4zaJAkC6pBsFjqi0NBQu-Po" />
 
         <activity
-            android:name=".DonateMapScreen"
+            android:name=".main_screen.DonateMapScreen"
             android:exported="false"
             android:label="@string/title_activity_donate_map_screen" />
         <activity
-            android:name=".ProfileScreen"
+            android:name=".main_screen.ProfileScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".main_screen.LoginScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,10 +56,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeScreen"
+            android:name=".main_screen.HomeScreen"
             android:exported="false" />
         <activity
-            android:name=".RegisterScreen"
+            android:name=".main_screen.RegisterScreen"
             android:exported="false" />
 
         <meta-data

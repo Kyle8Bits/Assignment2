@@ -1,9 +1,7 @@
-package com.example.assignment2;
+package com.example.assignment2.main_screen;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -13,6 +11,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.assignment2.R;
 import com.example.assignment2.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -84,7 +83,7 @@ public class RegisterScreen extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
 
-                            User newUser = new User(firstNameText, lastNameText, emailText, phoneText, dobText, idNumberText, bloodTypeInput);
+                            User newUser = new User(firstNameText, lastNameText, emailText, phoneText, dobText, idNumberText, bloodTypeInput, "DONOR");
 
                             db.collection("users").document(user.getUid())  // Store under user's UID
                                     .set(newUser)

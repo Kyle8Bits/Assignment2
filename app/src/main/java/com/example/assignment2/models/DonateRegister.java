@@ -3,6 +3,7 @@ import com.google.firebase.Timestamp;
 
 public class DonateRegister {
     private String donateSiteId;
+    private String siteName;
     private String userID;
     private String status;
     private String timeRegister;
@@ -15,18 +16,23 @@ public class DonateRegister {
     private String governmentID;
     public DonateRegister() {}
 
-    public DonateRegister(String donateSiteId, String userID, String timeRegister, String dateRegister, String bloodType, String lastName, String firstName, String dob, String governmentID) {
+    public DonateRegister(String donateSiteId, String userID, String timeRegister, String dateRegister, String bloodType, String lastName, String firstName, String dob, String governmentID, double donationAmount, String status,String siteName) {
         this.donateSiteId = donateSiteId;
         this.userID = userID;
-        this.status = "On process";
+        this.status = status;
         this.timeRegister = timeRegister;
         this.dateRegister = dateRegister;
         this.bloodType = bloodType;
-        this.donationAmount = 0;
+        this.donationAmount = donationAmount;
         this.lastName = lastName;
         this.firstName = firstName;
         this.dob = dob;
         this.governmentID = governmentID;
+        this.siteName = siteName;
+    }
+
+    public String getSiteName() {
+        return siteName;
     }
 
     public String getDonateSiteId() {

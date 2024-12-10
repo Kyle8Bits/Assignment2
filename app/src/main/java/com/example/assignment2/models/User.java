@@ -7,12 +7,13 @@ public class User {
     private String dob;
     private String idNumber;
     private String bloodType;
+    private String userType;
 
     public User() {
     }
 
     public User(String firstName, String lastName, String email, String phone,
-                String dob, String idNumber, String bloodType) {
+                String dob, String idNumber, String bloodType, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -20,12 +21,20 @@ public class User {
         this.dob = dob;
         this.idNumber = idNumber;
         this.bloodType = bloodType;
+        this.userType = userType;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
