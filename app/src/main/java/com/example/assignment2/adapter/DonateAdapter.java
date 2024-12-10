@@ -1,7 +1,9 @@
 package com.example.assignment2.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -31,11 +33,22 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
     @Override
     public void onBindViewHolder(@NonNull DonateView holder, int position) {
         holder.donationSiteName.setText(donateList.get(position).getSiteName());
+        holder.date.setText(donateList.get(position).getDateRegister());
+        holder.bloodAmount.setText(String.valueOf(donateList.get(position).getDonationAmount()));
+
+        if(!donateList.get(position).getStatus().equals("DONE")){
+            holder.buttons.setVisibility(View.VISIBLE);
+            holder.status.setTextColor(Color.parseColor("#eb9234"));
+            holder.time.setVisibility(View.VISIBLE);
+        }
+
+        holder.timeRegis.setText(donateList.get(position).getTimeRegister());
+        holder.status.setText(donateList.get(position).getStatus());
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return donateList.size();
     }
 }

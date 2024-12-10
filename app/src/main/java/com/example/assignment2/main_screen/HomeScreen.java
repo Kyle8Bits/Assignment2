@@ -92,7 +92,6 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     public void updateTotalBloodAmount(List<DonateRegister> donateRegisters, FirebaseUser currentUser) {
-        System.out.println(currentUser.getUid());
         double amount = utils.getUserTotalBloodAmount(donateRegisters, currentUser.getUid());
         amountDonate.setText(String.valueOf(amount));
     }

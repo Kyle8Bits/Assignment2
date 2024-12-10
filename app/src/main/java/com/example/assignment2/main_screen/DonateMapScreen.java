@@ -43,6 +43,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         binding = ActivityDonateMapScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        requestPermission();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -74,6 +75,8 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(RMIT));
+
+        getPosition();
     }
 
     @SuppressLint("MissingPermission")
@@ -81,15 +84,18 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
+                try {
+                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location")
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
-                LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-                // Move and zoom the camera to the current location
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
 
+                    Toast.makeText(DonateMapScreen.this,location.getLatitude()+"", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
 
-                Toast.makeText(DonateMapScreen.this,location.getLatitude()+"", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -3,7 +3,9 @@ package com.example.assignment2.list_screen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,49 +18,24 @@ import com.example.assignment2.main_screen.DonateMapScreen;
 import com.example.assignment2.main_screen.ProfileScreen;
 
 public class VolunteerRecord extends AppCompatActivity {
-
+    TextView name;
+    FrameLayout goBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_volunteer_record);
-
-        setupFooter();
-    }
+        setContentView(R.layout.donation_record_layout);
+        name = findViewById(R.id.listName);
 
 
-    public void setupFooter() {
-        ImageButton homeNav, bookNav, profileNav;
-        homeNav = findViewById(R.id.homeNav);
-        bookNav = findViewById(R.id.bookingNav);
-        profileNav = findViewById(R.id.profileNav);
+        name.setText("Volunteer record");
 
-        homeNav.setActivated(true);
-
-        homeNav.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        finish();
-                    }
-                });
-
-        bookNav.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(VolunteerRecord.this, DonateMapScreen.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-
-        profileNav.setOnClickListener(new View.OnClickListener(){
+        goBack = findViewById(R.id.goBack);
+        goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VolunteerRecord.this, ProfileScreen.class);
-                startActivity(intent);
                 finish();
             }
         });
     }
+
 }

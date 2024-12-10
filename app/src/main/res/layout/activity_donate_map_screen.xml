@@ -16,6 +16,18 @@
         android:layout_above="@id/footer"
         tools:context=".main_screen.DonateMapScreen" />
 
+
+    <SearchView
+        android:id="@+id/mapSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:queryHint="Search..."
+        android:iconifiedByDefault="false"
+        android:elevation="5dp"
+        android:background="@drawable/round_corner_bg"
+        />
+
     <include
         android:id="@+id/footer"
         layout="@layout/bottom_navigate"

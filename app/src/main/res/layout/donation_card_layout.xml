@@ -29,7 +29,7 @@
             android:id="@+id/donationSiteName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="VinMec"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -53,7 +53,7 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="8 December 2024"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -78,7 +78,7 @@
             android:id="@+id/bloodAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="350 mL"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -127,19 +127,45 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/roboto_bold"
             android:text="Status:"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            tools:layout_weight="1" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="Completed"
             android:textColor="@color/green" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/timeDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Time:"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/timeRegis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="00:00"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <LinearLayout
@@ -151,15 +177,6 @@
         android:visibility="gone">
 
         <Button
-            android:id="@+id/editButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:text="Edit" />
-
-        <Button
             android:id="@+id/cancleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -167,5 +184,6 @@
             android:layout_weight="1"
             android:text="Cancle" />
     </LinearLayout>
+
 
 </LinearLayout>

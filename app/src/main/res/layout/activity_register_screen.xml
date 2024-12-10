@@ -21,7 +21,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame"
+                android:id="@+id/returnButton"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:contentDescription="Touch space of return"

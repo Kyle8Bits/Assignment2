@@ -10,7 +10,7 @@ public class VolunteerRegister {
     private String timeRegister;
     public VolunteerRegister() {}
 
-    public VolunteerRegister(String userID, String donateSiteId,  String dateRegister,String timeRegister) {
+    public VolunteerRegister(String userID, String donateSiteId, String dateRegister,String timeRegister) {
         this.userID = userID;
         this.donateSiteId = donateSiteId;
         this.status = "Registered";

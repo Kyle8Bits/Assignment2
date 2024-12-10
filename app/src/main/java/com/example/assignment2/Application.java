@@ -29,6 +29,9 @@ public class Application {
         return currentUserFirebase;
     }
 
+    public List<DonateRegister> getUserDonateRegister() {
+        return userDonateRegister;
+    }
 
     public void getCurrentUserData(FirebaseUser user, final UserDataCallback callback) {
         if (user != null) {

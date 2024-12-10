@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     android:background="@color/background_cream"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".list_screen.DonationRecord">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +21,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame"
+                android:id="@+id/goBack"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -76,7 +78,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listSection"
+        android:id="@+id/donateRCV"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
