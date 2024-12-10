@@ -21,7 +21,7 @@ public class HomeScreen extends AppCompatActivity {
     FirebaseAuth auth;
     TextView user_name ,userBloodType, donate_num, amountDonate ;
     FirebaseUser user;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    Application app = new Application();
 
     User currentUser;
     @Override
@@ -37,47 +37,41 @@ public class HomeScreen extends AppCompatActivity {
         donate_num = findViewById(R.id.donate_num);
         amountDonate = findViewById(R.id.blood_donated);
 
-        if (user != null) {
-            getCurrentUserData(user);
-        } else {
-            Log.d("Firebase", "No user is signed in");
-        }
+        getData();
 
         setupFooter();
     }
 
-    public void getCurrentUserData(FirebaseUser user) {
+
+    private void getData(){
         if (user != null) {
-            // Example: Get a specific document from a collection
-            db.collection("users") // Replace with your collection name
-                    .document(user.getUid()) // Document ID is the user's UID
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            // Document data is available
-                            Map<String, Object> data = documentSnapshot.getData();
-                            // Use the data
-                            currentUser = new User(data.get("firstName").toString(), data.get("lastName").toString(),data.get("email").toString(),data.get("phone").toString(),data.get("dob").toString(),data.get("idNumber").toString(),data.get("bloodType").toString());
-                            updateUI(currentUser);
-                        } else {
-                            Log.d("Firestore", "No such document");
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle error
-                        Log.w("Firestore", "Error getting document", e);
-                    });
+            app.getCurrentUserData(user, new Application.UserDataCallback() {
+                @Override
+                public void onSuccess(User userData) {
+                    // Data is ready, update UI
+                    currentUser = userData;
+                    updateUI(currentUser);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    // Handle failure
+                    Log.d("Firebase", "Error: " + e.getMessage());
+                }
+            });
         } else {
-            // No user is signed in
             Log.d("Firebase", "No user is signed in");
         }
     }
 
     public void updateUI(User user) {
         if (user != null) {
-            user_name.setText(user.getFirstName() + " " + auth.getCurrentUser().getUid()); // Set full name
+            user_name.setText(user.getFirstName()); // Set full name
             userBloodType.setText(user.getBloodType()); // Set blood type
              // Set donation count
+        }
+        else {
+            System.out.println("Cannot find user");
         }
     }
     public void setupFooter() {

@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginScreen extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
+    private Application app = new Application();
+
     @Override
     public void onStart() {
         super.onStart();
@@ -77,6 +79,7 @@ public class LoginScreen extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+
                                     Toast.makeText(LoginScreen.this, "Authentication successfully.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                     startActivity(intent);
