@@ -17,12 +17,21 @@ import java.util.List;
 import java.util.Map;
 
 public class Application {
-    private User currentUser;
+    private static User currentUser;
     private List<DonateRegister> userDonateRegister;
     private List<VolunteerRegister> userVolunteer;
     private List<DonateSite> allDonateSite;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth auth = FirebaseAuth.getInstance();
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
     FirebaseUser currentUserFirebase = auth.getCurrentUser();
 
     public FirebaseUser getCurrentUserFirebase() {

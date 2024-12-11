@@ -9,10 +9,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.assignment2.R;
+import com.example.assignment2.utils.FindPlaceTask;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,11 +26,14 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.assignment2.databinding.ActivityDonateMapScreenBinding;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import org.json.JSONObject;
 
 public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallback {
 
@@ -45,21 +50,18 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         binding = ActivityDonateMapScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
         requestPermission();
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        try {
-            mapSearch = findViewById(R.id.mapSearchBar);
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
         }
 
+        mapSearch = findViewById(R.id.mapSearchBar);
+        mapSearch.requestFocus();
         setupFooter();
+        setUpSearchBar();
     }
 
     /**
@@ -74,7 +76,16 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getPosition();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                Toast.makeText(DonateMapScreen.this,"Your location", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
     }
 
     @SuppressLint("MissingPermission")
@@ -124,6 +135,52 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    public void setUpSearchBar(){
+        mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // When search is submitted, call the FindPlaceTask with the query
+                new FindPlaceTask() {
+                    @Override
+                    protected void onPostExecute(String result) {
+                        if (result != null) {
+                            try {
+                                // Parse the JSON result
+                                JSONObject jsonObject = new JSONObject(result);
+                                JSONObject candidate = jsonObject.getJSONArray("candidates").getJSONObject(0);
+                                String formattedAddress = candidate.getString("formatted_address");
+                                JSONObject geometry = candidate.getJSONObject("geometry");
+                                JSONObject location = geometry.getJSONObject("location");
+                                double lat = location.getDouble("lat");
+                                double lng = location.getDouble("lng");
+
+                                // Move the map to the location
+                                LatLng locationLatLng = new LatLng(lat, lng);
+                                mMap.clear();  // Clear previous markers
+                                mMap.addMarker(new MarkerOptions().position(locationLatLng).title(formattedAddress));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationLatLng, 15));
+
+                                // Optionally show a toast with the place name
+
+                            } catch (Exception e) {
+                                Log.e("MapActivity", "Error parsing JSON response: " + e.getMessage(), e);
+                            }
+                        } else {
+                            Log.e("MapActivity", "Error fetching place.");
+                        }
+                    }
+                }.execute(query); // Pass the query to the AsyncTask
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false; // No action needed for text changes
+            }
+        });
+
+    }
     public void setupFooter() {
         ImageButton homeNav, bookNav, profileNav;
 

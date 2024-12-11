@@ -12,7 +12,7 @@ public class FindPlaceTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String apiKey = "YOUR_API_KEY"; // Replace with your API Key
+        String apiKey = "AIzaSyAmYG0ewlmb4zaJAkC6pBsFjqi0NBQu-Po"; // Replace with your API Key
         String input = params[0]; // Input text for the place
         String fields = "formatted_address,name,geometry";
         String urlString = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?"

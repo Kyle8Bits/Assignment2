@@ -39,7 +39,7 @@ public class LoginScreen extends AppCompatActivity {
                        startActivity(intent);
                        finish();
                    }
-                   if(userData.getUserType().equals("MANAGER")){
+                   else if(userData.getUserType().equals("MANAGER")){
                        Intent intent = new Intent(LoginScreen.this, ManagerScreen.class);
                        startActivity(intent);
                        finish();
@@ -100,12 +100,12 @@ public class LoginScreen extends AppCompatActivity {
                                         public void onSuccess(User userData) {
                                             if(currentUser != null){
                                                 if(userData.getUserType().equals("DONOR")){
-                                                    Intent intent = new Intent(LoginScreen.this, ManagerScreen.class);
+                                                    Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }
                                                 if(userData.getUserType().equals("MANAGER")){
-                                                    Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
+                                                    Intent intent = new Intent(LoginScreen.this, ManagerScreen.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }

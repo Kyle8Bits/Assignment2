@@ -48,7 +48,8 @@ public class HomeScreen extends AppCompatActivity {
             app.getCurrentUserData(currentUser, new Application.UserDataCallback() {
                 @Override
                 public void onSuccess(User userData) {
-                    updateLabel(userData);
+                    app.setCurrentUser(userData);
+                    updateLabel(app.getCurrentUser());
                 }
 
                 @Override

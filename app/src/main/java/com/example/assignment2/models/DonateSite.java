@@ -12,7 +12,7 @@ public class DonateSite {
     private String managerUID;
     private String date;
 
-    private String status = "Open Register";
+    private String status;
     private List<String> donationRegisterIds = new ArrayList<>();
 
     private String donationStartTime;
