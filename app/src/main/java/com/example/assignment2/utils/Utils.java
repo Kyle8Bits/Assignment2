@@ -1,4 +1,4 @@
-package com.example.assignment2;
+package com.example.assignment2.utils;
 
 import com.example.assignment2.models.DonateRegister;
 

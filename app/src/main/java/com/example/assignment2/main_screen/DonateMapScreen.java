@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import android.location.Location;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -34,8 +35,9 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     private GoogleMap mMap;
     private ActivityDonateMapScreenBinding binding;
     private FusedLocationProviderClient client;
-
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    SearchView mapSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +45,20 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         binding = ActivityDonateMapScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         requestPermission();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        try {
+            mapSearch = findViewById(R.id.mapSearchBar);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
         setupFooter();
     }
 
@@ -63,24 +74,12 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        client = LocationServices.getFusedLocationProviderClient(this);
-        LatLng RMIT = new LatLng(  10.72933983229157, 106.69585581177428);
-
-        mMap.addMarker(new MarkerOptions().position(RMIT).title("Marker electrical")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(RMIT, 15));
-
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(RMIT));
-
         getPosition();
     }
 
     @SuppressLint("MissingPermission")
     public void getPosition(){
+        client = LocationServices.getFusedLocationProviderClient(this);
         client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -91,7 +90,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
 
-                    Toast.makeText(DonateMapScreen.this,location.getLatitude()+"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DonateMapScreen.this,"Your location", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }

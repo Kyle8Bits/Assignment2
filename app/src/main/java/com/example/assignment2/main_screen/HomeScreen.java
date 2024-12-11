@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assignment2.Application;
 import com.example.assignment2.R;
-import com.example.assignment2.Utils;
+import com.example.assignment2.utils.Utils;
 import com.example.assignment2.list_screen.DonationRecord;
 import com.example.assignment2.list_screen.VolunteerRecord;
 import com.example.assignment2.models.DonateRegister;
