@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corner_bg"
+    android:backgroundTint="@color/background_cream">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center_horizontal"
+            android:text="Create Donation Drive"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Location:"
+                android:textColor="@color/red" />
+
+            <EditText
+                android:id="@+id/locationName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/round_corner_bg"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Name"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/round_corner_bg"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Address"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Information"
+                android:textColor="@color/red" />
+
+            <Spinner
+                android:id="@+id/bloodTypeCl"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/round_corner_bg"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+
+            <EditText
+                android:id="@+id/amountCl"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/round_corner_bg"
+                android:digits="0123456789"
+                android:ems="10"
+                android:hint="Amount collecting (Litre)"
+                android:inputType="number"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Date/Time"
+                android:textColor="@color/red" />
+
+            <EditText
+                android:id="@+id/dateCl"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/round_corner_bg"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Date"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/startTCL"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_corner_bg"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="From"
+                android:inputType="time"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/endTCL"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_corner_bg"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="To"
+                android:inputType="time"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/createDonateDrive"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Create" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

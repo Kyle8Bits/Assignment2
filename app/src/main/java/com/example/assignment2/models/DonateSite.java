@@ -14,24 +14,19 @@ public class DonateSite {
 
     private String status;
     private List<String> donationRegisterIds = new ArrayList<>();
+    private List<String> volunteerRegisterIds = new ArrayList<>();
 
     private String donationStartTime;
     private String donationEndTime;
 
-    private double A_positive = 0;
-    private double B_positive = 0;
-    private double O_positive = 0;
-    private double AB_positive = 0;
-    private double A_negative = 0;
-    private double B_negative = 0;
-    private double O_negative = 0;
-    private double AB_negative = 0;
+    private double amountOfBlood;
+    private String bloodCollectType;
+
     public DonateSite() {
 
     }
 
-    public DonateSite(String name, String address, double latitude, double longitude, String phone, String managerUID,String date, String status, List<String> donationRegisterIds, String donationStartTime, String donationEndTime, double a_positive, double b_positive, double o_positive, double AB_positive, double a_negative, double b_negative, double o_negative, double AB_negative) {
-        this.name = name;
+    public DonateSite(String name, String address, double latitude, double longitude, String phone, String managerUID, String date, String status, List<String> donationRegisterIds, List<String> volunteerRegisterIds, String donationStartTime, String donationEndTime, double amountOfBlood, String bloodCollectType) {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -40,18 +35,40 @@ public class DonateSite {
         this.date =  date;
         this.status = status;
         this.donationRegisterIds = donationRegisterIds;
+        this.volunteerRegisterIds = volunteerRegisterIds;
         this.donationStartTime = donationStartTime;
         this.donationEndTime = donationEndTime;
+        this.amountOfBlood = amountOfBlood;
+        this.bloodCollectType = bloodCollectType;
+    }
 
-        this.A_positive = a_positive;
-        this.B_positive = b_positive;
-        this.O_positive = o_positive;
-        this.AB_positive = AB_positive;
+    public double getAmountOfBlood() {
+        return amountOfBlood;
+    }
+    public void setAmountOfBlood(double ammountOfBlood) {
+        this.amountOfBlood = ammountOfBlood;
+    }
+    public List<String> getVolunteerRegisterIds() {
+        return volunteerRegisterIds;
+    }
 
-        this.A_negative = a_negative;
-        this.B_negative = b_negative;
-        this.O_negative = o_negative;
-        this.AB_negative = AB_negative;
+    public void setVolunteerRegisterIds(List<String> volunteerRegisterIds) {
+        this.volunteerRegisterIds = volunteerRegisterIds;
+    }
+
+    public String getStatus(){
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getBloodCollectType() {
+        return bloodCollectType;
+    }
+
+    public void setBloodCollectType(String bloodCollectType) {
+        this.bloodCollectType = bloodCollectType;
     }
 
     public String getName() {
@@ -112,38 +129,6 @@ public class DonateSite {
         this.managerUID = managerUID;
     }
 
-    public double getABnegative() {
-        return AB_negative;
-    }
-
-    public double getOnegative() {
-        return O_negative;
-    }
-
-    public double getBnegative() {
-        return B_negative;
-    }
-
-    public double getAnegative() {
-        return A_negative;
-    }
-
-    public double getABpositive() {
-        return AB_positive;
-    }
-
-    public double getOpositive() {
-        return O_positive;
-    }
-
-    public double getBpositive() {
-        return B_positive;
-    }
-
-    public double getApositive() {
-        return A_positive;
-    }
-
     public String getDonationStartTime() {
         return donationStartTime;
     }
@@ -170,36 +155,7 @@ public class DonateSite {
         }
     }
 
-    public void closeSite (){
-        this.status = "Close";
-    }
-
-    public void addApositive(double apositive){
-        this.A_positive += apositive;
-    }
-    public void addBpositive(double bpositive){
-        this.B_positive += bpositive;
-    }
-    public void addOpositive(double opositive){
-        this.O_positive += opositive;
-    }
-    public void addABpositive(double abpositive) {
-        this.AB_positive += abpositive;
-    }
-    public void addAnegative(double anegative){
-        this.A_negative += anegative;
-    }
-    public void addBnegative(double bnegative){
-        this.B_negative += bnegative;
-    }
-    public void addOnegative(double onegative) {
-        this.O_negative += onegative;
-    }
-    public void addABnegative(double abnegative) {
-        this.AB_negative += abnegative;
-    }
-    public double getTotalAmount(){
-        double total = this.A_positive + this.B_positive + this.O_positive + this.AB_positive + this.A_negative + this.B_negative + this.O_negative + this.AB_negative;
-        return total;
+    public void addBlood(double blood){
+        this.amountOfBlood += blood;
     }
 }

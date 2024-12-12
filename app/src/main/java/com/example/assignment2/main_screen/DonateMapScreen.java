@@ -6,15 +6,23 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.assignment2.Application;
 import com.example.assignment2.R;
+import com.example.assignment2.models.DonateSite;
 import com.example.assignment2.utils.FindPlaceTask;
+import com.example.assignment2.utils.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +31,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import android.location.Location;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -35,14 +45,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityDonateMapScreenBinding binding;
     private FusedLocationProviderClient client;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
+    Application app = new Application();
+    Utils utils = new Utils();
     SearchView mapSearch;
+    private String address, locationName;
+    private LatLng coor ;
+    String bloodType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,23 +78,108 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         mapSearch = findViewById(R.id.mapSearchBar);
         mapSearch.requestFocus();
         setupFooter();
-        setUpSearchBar();
+        getPosition();
+        if(app.getCurrentUser().getUserType().equals("MANAGER")){
+            setUpSearchBar();
+        }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+        if(app.getCurrentUser().getUserType().equals("MANAGER")){
+            managerSetOnMarker();
+        }
+        else {
+            donorSetOnMarker();
+        }
+
+    }
+
+    public void managerSetOnMarker(){
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+
+                try {
+                    showCreateForm(locationName,address,coor);
+
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+                return true;
+            }
+        });
+    }
+
+    public void showCreateForm(String nameOfPlace, String address, LatLng coordinate){
+        EditText nameLocation, addressLocation, amount, date, start, end;
+        Spinner bloodType;
+        Button create;
+
+        Dialog createForm = new Dialog(this);
+        createForm.setContentView(R.layout.pop_create_drive);
+        createForm.setCancelable(true);
+        createForm.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+
+        nameLocation = createForm.findViewById(R.id.locationName);
+        addressLocation = createForm.findViewById(R.id.address);
+        amount = createForm.findViewById(R.id.amountCl);
+        date = createForm.findViewById(R.id.dateCl);
+        start = createForm.findViewById(R.id.startTCL);
+        end = createForm.findViewById(R.id.endTCL);
+        bloodType = createForm.findViewById(R.id.bloodTypeCl);
+        create = createForm.findViewById(R.id.createDonateDrive);
+
+        createForm.show();
+
+        date.setOnClickListener(v -> utils.showDatePicker(date, DonateMapScreen.this) );
+        end.setOnClickListener(v -> utils.showTimePicker(end, DonateMapScreen.this) );
+        start.setOnClickListener(v -> utils.showTimePicker(start, DonateMapScreen.this) );
+
+        setupBloodTypeSpinner(bloodType);
+
+        nameLocation.setText(nameOfPlace);
+        addressLocation.setText(address);
+
+        create.setOnClickListener(v -> {
+            if (amount.getText().toString().isEmpty() || date.getText().toString().isEmpty() ||
+                    start.getText().toString().isEmpty() || end.getText().toString().isEmpty() ||
+                    bloodType.getSelectedItem() == null ) {
+                Toast.makeText(DonateMapScreen.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+
+            } else if (!utils.isTimeLogical(start.getText().toString(), end.getText().toString())) {
+                Toast.makeText(DonateMapScreen.this, "The start time must be earlier then the end time", Toast.LENGTH_SHORT).show();
+            } else {
+                DonateSite site = new DonateSite(locationName, address, coordinate.latitude, coordinate.longitude,
+                        app.getCurrentUser().getPhone(), app.getCurrentUser().getUserId(), date.getText().toString(),
+                        "Open Register", null, null, start.getText().toString(), end.getText().toString(),
+                        Double.parseDouble(amount.getText().toString()), bloodType.getSelectedItem().toString()
+                        );
+                createDonateSite(site);
+            }
+        });
+    }
+
+    public void createDonateSite(DonateSite site){
+        app.createNewSite(site, new Application.CreateSiteCallback() {
+            @Override
+            public void onSuccess(String documentId) {
+                Toast.makeText(DonateMapScreen.this,"Success creating new site", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(DonateMapScreen.this,"Fail creating new site", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void donorSetOnMarker(){
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
@@ -85,7 +187,6 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 return true;
             }
         });
-
     }
 
     @SuppressLint("MissingPermission")
@@ -136,6 +237,8 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     }
 
     public void setUpSearchBar(){
+
+        mapSearch.setVisibility(View.VISIBLE);
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @SuppressLint("StaticFieldLeak")
             @Override
@@ -152,16 +255,19 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                                 String formattedAddress = candidate.getString("formatted_address");
                                 JSONObject geometry = candidate.getJSONObject("geometry");
                                 JSONObject location = geometry.getJSONObject("location");
+                                String name =  candidate.getString("name");
                                 double lat = location.getDouble("lat");
                                 double lng = location.getDouble("lng");
 
-                                // Move the map to the location
                                 LatLng locationLatLng = new LatLng(lat, lng);
-                                mMap.clear();  // Clear previous markers
-                                mMap.addMarker(new MarkerOptions().position(locationLatLng).title(formattedAddress));
+                                mMap.clear();
+                                mMap.addMarker(new MarkerOptions().position(locationLatLng).title(formattedAddress)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationLatLng, 15));
 
-                                // Optionally show a toast with the place name
+                                address = formattedAddress;
+                                coor = locationLatLng;
+                                locationName = name;
 
                             } catch (Exception e) {
                                 Log.e("MapActivity", "Error parsing JSON response: " + e.getMessage(), e);
@@ -181,6 +287,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         });
 
     }
+
     public void setupFooter() {
         ImageButton homeNav, bookNav, profileNav;
 
@@ -208,4 +315,38 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         });
 
     }
+
+    private void setupBloodTypeSpinner(Spinner bloodTypeSpinner) {
+        // Create an ArrayAdapter using the blood_types string array
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.blood_types, // Blood types array defined in strings.xml
+                android.R.layout.simple_spinner_item // Layout for individual items
+        );
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the Spinner
+        bloodTypeSpinner.setAdapter(adapter);
+
+        // Set an item selection listener to handle the selected blood type
+        bloodTypeSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parentView, android.view.View view, int position, long id) {
+                // Get the selected blood type as a String
+                bloodType = parentView.getItemAtPosition(position).toString();
+
+                // Optionally, display the selected blood type as a Toast (for debugging)
+                Toast.makeText(DonateMapScreen.this, "Selected Blood Type: " + bloodType, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parentView) {
+                // Handle the case where no item is selected (optional)
+                bloodType = "";
+            }
+        });
+    }
+
 }

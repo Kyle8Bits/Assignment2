@@ -46,7 +46,7 @@ public class ProfileScreen extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void displayInformation(User user){
-        usernameHeader = findViewById(R.id.userNameProfile);
+        usernameHeader = findViewById(R.id.managerName);
         username = findViewById(R.id.profileName);
         email = findViewById(R.id.profileEmail);
         phone = findViewById(R.id.profilePhone);

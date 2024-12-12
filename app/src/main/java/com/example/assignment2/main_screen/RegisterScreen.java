@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assignment2.R;
 import com.example.assignment2.models.User;
+import com.example.assignment2.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +27,7 @@ public class RegisterScreen extends AppCompatActivity {
     private TextView createButton;
     private String bloodType;
     private Spinner bloodTypeSpinner;
+    Utils utils = new Utils();
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -48,7 +50,7 @@ public class RegisterScreen extends AppCompatActivity {
         dob = findViewById(R.id.dob);
         idNumber = findViewById(R.id.id_number);
         createButton = findViewById(R.id.create_acc); // Assuming you have a button for creating the account
-        dob.setOnClickListener(v -> showDatePicker());
+        dob.setOnClickListener(v -> utils.showDatePicker(dob,RegisterScreen.this));
         bloodTypeSpinner = findViewById(R.id.bloodTypeSpinner);
         setupBloodTypeSpinner();
         // Load blood types from strings.xml into the Spinner
@@ -83,12 +85,13 @@ public class RegisterScreen extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
 
-                            User newUser = new User(firstNameText, lastNameText, emailText, phoneText, dobText, idNumberText, bloodTypeInput, "DONOR");
+                            User newUser = new User(firstNameText, lastNameText, emailText, phoneText, dobText, idNumberText, bloodTypeInput, "DONOR", "N/A");
 
                             db.collection("users").document(user.getUid())  // Store under user's UID
                                     .set(newUser)
                                     .addOnSuccessListener(aVoid -> {
                                         Toast.makeText(RegisterScreen.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
                                         // Navigate to the next screen (e.g., login)
                                     })
                                     .addOnFailureListener(e -> {
@@ -101,30 +104,8 @@ public class RegisterScreen extends AppCompatActivity {
                 });
     }
 
-    private void showDatePicker() {
-        // Get the current date to show it as default
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        // Create a DatePickerDialog and show it
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                RegisterScreen.this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Month is zero-based, so we add 1 to the month
-                    String dobText = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                    dob.setText(dobText);  // Set the selected date to the EditText
-                },
-                year, month, day // Initial date set to the current date
-        );
-
-        // Show the date picker
-        datePickerDialog.show();
-    }
 
     private void setupBloodTypeSpinner() {
-        bloodTypeSpinner = findViewById(R.id.bloodTypeSpinner); // Get the Spinner by ID
 
         // Create an ArrayAdapter using the blood_types string array
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -156,9 +137,5 @@ public class RegisterScreen extends AppCompatActivity {
                 bloodType = "";
             }
         });
-    }
-
-    private void backToLoginScreen() {
-        // Implement the logic to go back to the login screen (e.g., using an Intent)
     }
 }

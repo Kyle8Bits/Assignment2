@@ -1,5 +1,6 @@
 package com.example.assignment2.models;
 public class User {
+    private String userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,7 +14,8 @@ public class User {
     }
 
     public User(String firstName, String lastName, String email, String phone,
-                String dob, String idNumber, String bloodType, String userType) {
+                String dob, String idNumber, String bloodType, String userType, String userId) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -22,6 +24,14 @@ public class User {
         this.idNumber = idNumber;
         this.bloodType = bloodType;
         this.userType = userType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
