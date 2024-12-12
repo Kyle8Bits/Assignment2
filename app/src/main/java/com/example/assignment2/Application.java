@@ -67,7 +67,7 @@ public class Application {
     //Get register
     public void getUserRegisterData(FirebaseUser user, final UserRegisterDonateCallback callback) {
         if (user != null) {
-            db.collection("donations")
+            db.collection("donate_registers")
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         List<DonateRegister> donateRegisters = new ArrayList<>();
@@ -85,7 +85,8 @@ public class Application {
                                     data.get("governmentID").toString(),
                                     documentSnapshot.getDouble("donationAmount"),
                                     data.get("status").toString(),
-                                    data.get("siteName").toString()
+                                    data.get("siteName").toString(),
+                                    documentSnapshot.getId()
                             );
                             donateRegisters.add(donateRegister);
                         });
@@ -200,7 +201,6 @@ public class Application {
             callback.onFailure(new Exception("No user signed in"));
         }
     }
-
     public interface SiteDataCallBack {
         void onSuccess(List<DonateSite> donateSites);
 
@@ -208,7 +208,7 @@ public class Application {
     }
 
 
-    //creat new site
+    //create new site
     public void createNewSite(DonateSite newSite, final CreateSiteCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference sitesCollection = db.collection("sites");
@@ -255,5 +255,84 @@ public class Application {
         void onFailure(Exception e);
     }
 
+    //create new donate register
+    public void createNewDonateRegister(DonateRegister donateRegister, final CreateDonateRegisterCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference sitesCollection = db.collection("donate_registers");
 
+        DocumentReference newSiteRef = sitesCollection.document();
+        // Create a new site object
+        Map<String, Object> register = new HashMap<>();
+        register.put("bloodType", donateRegister.getBloodType());
+        register.put("dateRegister", donateRegister.getDateRegister());
+        register.put("dob", donateRegister.getDob());
+        register.put("firstName", donateRegister.getFirstName());
+        register.put("lastName", donateRegister.getLastName());
+        register.put("timeRegister", donateRegister.getTimeRegister());
+        register.put("userID", donateRegister.getUserID());
+        register.put("siteName", donateRegister.getSiteName());
+        register.put("donateSiteId", donateRegister.getDonateSiteId());
+        register.put("status", donateRegister.getStatus());
+        register.put("donationAmount", donateRegister.getDonationAmount());
+        register.put("governmentID", donateRegister.getGovernmentID());
+        register.put("registerId", newSiteRef.getId());
+
+        // Add a new document with a generated ID
+        sitesCollection.add(register)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        callback.onSuccess(documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+    public interface CreateDonateRegisterCallback {
+        void onSuccess(String documentId);
+        void onFailure(Exception e);
+    }
+
+    //create new volunteer register
+    public void createNewVolunteerRegister(VolunteerRegister volunteerRegister, final CreateVolunteerRegisterCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference volunteer_registers_clt = db.collection("volunteer_registers");
+
+        DocumentReference newSiteRef = volunteer_registers_clt.document();
+        // Create a new site object
+        Map<String, Object> register = new HashMap<>();
+        register.put("userID", volunteerRegister.getUserID());
+        register.put("donateSiteId", volunteerRegister.getDonateSiteId());
+        register.put("status", volunteerRegister.getStatus());
+        register.put("timeRegister", volunteerRegister.getTimeRegister());
+        register.put("dateRegister", volunteerRegister.getDateRegister());
+        register.put("registerId", newSiteRef.getId());
+        register.put("firstName", volunteerRegister.getFirstName());
+        register.put("lastName", volunteerRegister.getLastName());
+        register.put("phone", volunteerRegister.getPhone());
+        register.put("gID", volunteerRegister.getgID());
+
+       volunteer_registers_clt.add(register)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        callback.onSuccess(documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    };
+
+    public interface CreateVolunteerRegisterCallback {
+        void onSuccess(String documentId);
+        void onFailure(Exception e);
+    }
 }

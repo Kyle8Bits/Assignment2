@@ -2,6 +2,7 @@ package com.example.assignment2.models;
 import com.google.firebase.Timestamp;
 
 public class DonateRegister {
+    private String id;
     private String donateSiteId;
     private String siteName;
     private String userID;
@@ -16,8 +17,9 @@ public class DonateRegister {
     private String governmentID;
     public DonateRegister() {}
 
-    public DonateRegister(String donateSiteId, String userID, String timeRegister, String dateRegister, String bloodType, String lastName, String firstName, String dob, String governmentID, double donationAmount, String status,String siteName) {
+    public DonateRegister(String donateSiteId, String userID, String timeRegister, String dateRegister, String bloodType, String lastName, String firstName, String dob, String governmentID, double donationAmount, String status,String siteName, String id) {
         this.donateSiteId = donateSiteId;
+        this.id = id;
         this.userID = userID;
         this.status = status;
         this.timeRegister = timeRegister;
@@ -28,6 +30,18 @@ public class DonateRegister {
         this.firstName = firstName;
         this.dob = dob;
         this.governmentID = governmentID;
+        this.siteName = siteName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setSiteName(String siteName) {
         this.siteName = siteName;
     }
 

@@ -20,7 +20,9 @@ import android.widget.ImageButton;
 
 import com.example.assignment2.Application;
 import com.example.assignment2.R;
+import com.example.assignment2.models.DonateRegister;
 import com.example.assignment2.models.DonateSite;
+import com.example.assignment2.models.VolunteerRegister;
 import com.example.assignment2.utils.FindPlaceTask;
 import com.example.assignment2.utils.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -123,7 +125,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         });
     }
 
-    public void showDonorPopup(String nameOfPlace, String addressPlace, String start, String end, String blood, String amount ){
+    public void showDonorPopup(DonateSite site ){
         TextView name, address, timeStart, timeEnd, bloodType, amountCl;
         Button donateRe, volunteer;
 
@@ -143,16 +145,67 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
 
         createForm.show();
 
-        name.setText(nameOfPlace);
-        address.setText(addressPlace);
-        timeStart.setText(start);
-        timeEnd.setText(end);
-        bloodType.setText(blood);
-        amountCl.setText(amount + " Litres");
+        name.setText(site.getName());
+        address.setText(site.getAddress());
+        timeStart.setText(site.getDonationStartTime());
+        timeEnd.setText(site.getDonationEndTime());
+        bloodType.setText(site.getBloodCollectType());
+        amountCl.setText(site.getAmountOfBlood() + " Litres");
 
+        donateRe.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DonateRegister donateRegister = new DonateRegister(site.getSiteId(), app.getCurrentUser().getUserId(), site.getDonationStartTime(),site.getDate(),
+                                site.getBloodCollectType(), app.getCurrentUser().getLastName(), app.getCurrentUser().getFirstName(), app.getCurrentUser().getDob(),
+                                app.getCurrentUser().getIdNumber(), 0, "WAITING", site.getName(),"");
+
+                        registerDonate(donateRegister);
+                        createForm.dismiss();
+                    }
+                });
+
+        volunteer.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        VolunteerRegister volunteerRegister = new VolunteerRegister(app.getCurrentUser().getUserId(), site.getSiteId(), "WAITING",
+                                site.getDate(), site.getDonationStartTime(),"" ,app.getCurrentUser().getFirstName(), app.getCurrentUser().getLastName(),
+                                app.getCurrentUser().getPhone(), app.getCurrentUser().getIdNumber());
+                        registerVolunteer(volunteerRegister);
+                        createForm.dismiss();
+                    }
+                });
 
 
     }
+
+    public void registerDonate(DonateRegister register){
+        app.createNewDonateRegister(register, new Application.CreateDonateRegisterCallback(){
+            @Override
+            public void onSuccess(String documentId) {
+                Toast.makeText(DonateMapScreen.this,"Successfully register", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(DonateMapScreen.this,"Fail creating new register", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void registerVolunteer(VolunteerRegister vlt_register){
+        app.createNewVolunteerRegister(vlt_register, new Application.CreateVolunteerRegisterCallback(){
+            @Override
+            public void onSuccess(String documentId) {
+                Toast.makeText(DonateMapScreen.this,"Successfully volunteer", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(DonateMapScreen.this,"Fail creating new register", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void showCreateForm(String nameOfPlace, String address, LatLng coordinate){
         EditText nameLocation, addressLocation, amount, date, start, end;
         Spinner bloodType;
@@ -225,7 +278,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 DonateSite site = (DonateSite) marker.getTag(); // Retrieve the DonateSite object from the tag
                 if (site != null) {
                     try {
-                        showDonorPopup(site.getName(), site.getAddress(),site.getDonationStartTime(), site.getDonationEndTime(), site.getBloodCollectType(), String.valueOf(site.getAmountOfBlood()));
+                        showDonorPopup(site);
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -363,11 +416,15 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
 
     public void setupFooter() {
         ImageButton homeNav, bookNav, profileNav;
-
+        TextView calendarCap;
+        calendarCap = findViewById(R.id.bookingText);
         homeNav = findViewById(R.id.homeNav);
         bookNav = findViewById(R.id.bookingNav);
         profileNav = findViewById(R.id.profileNav);
 
+        if(app.getCurrentUser().getUserType().equals("MANAGER")){
+            calendarCap.setText("Site");
+        }
 
 
         homeNav.setOnClickListener(

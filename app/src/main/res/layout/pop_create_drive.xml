@@ -98,7 +98,7 @@
                 android:background="@drawable/round_corner_bg"
                 android:digits="0123456789"
                 android:ems="10"
-                android:hint="Amount collecting (Litre)"
+                android:hint="Amount per person (ml)"
                 android:inputType="number"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
@@ -176,7 +176,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="Create" />
+                android:backgroundTint="@color/red"
+                android:text="Create"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>

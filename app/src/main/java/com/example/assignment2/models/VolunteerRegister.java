@@ -5,19 +5,67 @@ import com.google.firebase.Timestamp;
 public class VolunteerRegister {
     private String userID;
     private String donateSiteId;
-    private String status = "On Process";
+    private String status = "WAITING";
     private String dateRegister;
     private String timeRegister;
+    private String id;
+
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String gID;
     public VolunteerRegister() {}
 
-    public VolunteerRegister(String userID, String donateSiteId, String dateRegister,String timeRegister) {
+    public VolunteerRegister(String userID, String donateSiteId, String status, String dateRegister, String timeRegister, String id, String firstName, String lastName, String phone, String gID) {
         this.userID = userID;
         this.donateSiteId = donateSiteId;
-        this.status = "Registered";
+        this.status = status;
         this.dateRegister = dateRegister;
         this.timeRegister = timeRegister;
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.gID = gID;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getgID() {
+        return gID;
+    }
+
+    public void setgID(String gID) {
+        this.gID = gID;
+    }
+
+    public String getId() {return id;}
+
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getTimeRegister() {
         return timeRegister;
     }
