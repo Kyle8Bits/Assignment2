@@ -22,6 +22,7 @@ import com.example.assignment2.main_screen.DonateMapScreen;
 import com.example.assignment2.main_screen.HomeScreen;
 import com.example.assignment2.main_screen.ProfileScreen;
 import com.example.assignment2.models.DonateRegister;
+import com.example.assignment2.utils.Utils;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 public class DonationRecord extends AppCompatActivity {
     Application app = new Application();
     FrameLayout goBack;
+    Utils utils = new Utils();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class DonationRecord extends AppCompatActivity {
             @Override
             public void onSuccess(List<DonateRegister> donateRegisters) {
                 try {
-                    DonateAdapter adapter = new DonateAdapter(DonationRecord.this, donateRegisters);
+                    DonateAdapter adapter = new DonateAdapter(DonationRecord.this, utils.getUserRegister(donateRegisters));
                     recyclerView.setAdapter(adapter);
                 }
                 catch (Exception e){

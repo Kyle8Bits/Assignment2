@@ -2,6 +2,7 @@ package com.example.assignment2.main_screen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assignment2.Application;
 import com.example.assignment2.R;
+import com.example.assignment2.models.DonateSite;
 import com.example.assignment2.utils.Utils;
 import com.example.assignment2.list_screen.DonationRecord;
 import com.example.assignment2.list_screen.VolunteerRecord;
@@ -36,6 +38,7 @@ public class HomeScreen extends AppCompatActivity {
         amountDonate = findViewById(R.id.blood_donated);
 
         updateUIWithData();
+        getData();
         setupFooter();
         setNavigateTextView();
     }
@@ -62,7 +65,8 @@ public class HomeScreen extends AppCompatActivity {
                 @Override
                 public void onSuccess(List<DonateRegister> donateRegisters) {
                     try {
-                        updateTotalBloodAmount(donateRegisters, currentUser);
+                        app.setUserDonateRegister(donateRegisters);
+                        updateTotalBloodAmount(app.getUserDonateRegister(), currentUser);
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -78,6 +82,29 @@ public class HomeScreen extends AppCompatActivity {
 
         } else {
             System.out.println("No user data sign in");
+        }
+    }
+
+    public void getData() {
+        try {
+            FirebaseUser currentUser = app.getCurrentUserFirebase();
+            if (currentUser != null) {
+                app.getSiteData(currentUser, new Application.SiteDataCallBack() {
+                    @Override
+                    public void onSuccess(List<DonateSite> donateSites) {
+                        app.setAllDonateSite(donateSites);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e("HomeScreen", "Error fetching user data:", e);
+                    }
+                });
+            } else {
+                Log.d("HomeScreen", "No user data sign in");
+            }
+        } catch (Exception e) {
+            System.out.println("HomeScreen" + "Exception in getData:" +e);
         }
     }
 

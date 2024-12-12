@@ -46,6 +46,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallback {
 
@@ -59,7 +60,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     private String address, locationName;
     private LatLng coor ;
     String bloodType;
-
+    private Marker currentMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,6 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         setContentView(binding.getRoot());
 
         requestPermission();
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -79,9 +79,16 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         mapSearch.requestFocus();
         setupFooter();
         getPosition();
+
+
         if(app.getCurrentUser().getUserType().equals("MANAGER")){
-            setUpSearchBar();
+            setUpManager();
         }
+        else {
+            setUpManager();
+
+        }
+
     }
 
     @Override
@@ -93,9 +100,9 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
             managerSetOnMarker();
         }
         else {
+            setUpDonationLocation();
             donorSetOnMarker();
         }
-
     }
 
     public void managerSetOnMarker(){
@@ -105,6 +112,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
 
                 try {
                     showCreateForm(locationName,address,coor);
+                    System.out.println("Click");
 
                 }
                 catch (Exception e){
@@ -115,6 +123,36 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         });
     }
 
+    public void showDonorPopup(String nameOfPlace, String addressPlace, String start, String end, String blood, String amount ){
+        TextView name, address, timeStart, timeEnd, bloodType, amountCl;
+        Button donateRe, volunteer;
+
+        Dialog createForm = new Dialog(this);
+        createForm.setContentView(R.layout.pop_register_donation);
+        createForm.setCancelable(true);
+        createForm.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        donateRe = createForm.findViewById(R.id.donateRePop);
+        volunteer = createForm.findViewById(R.id.volunteerRePop);
+        name = createForm.findViewById(R.id.locationNamePopup);
+        address = createForm.findViewById(R.id.addressPopup);
+        timeStart = createForm.findViewById(R.id.startTimePopup);
+        timeEnd = createForm.findViewById(R.id.endTimePopup);
+        bloodType = createForm.findViewById(R.id.bloodTypePopup);
+        amountCl = createForm.findViewById(R.id.amountPopup);
+
+        createForm.show();
+
+        name.setText(nameOfPlace);
+        address.setText(addressPlace);
+        timeStart.setText(start);
+        timeEnd.setText(end);
+        bloodType.setText(blood);
+        amountCl.setText(amount + " Litres");
+
+
+
+    }
     public void showCreateForm(String nameOfPlace, String address, LatLng coordinate){
         EditText nameLocation, addressLocation, amount, date, start, end;
         Spinner bloodType;
@@ -159,7 +197,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                         app.getCurrentUser().getPhone(), app.getCurrentUser().getUserId(), date.getText().toString(),
                         "Open Register", null, null, start.getText().toString(), end.getText().toString(),
                         Double.parseDouble(amount.getText().toString()), bloodType.getSelectedItem().toString()
-                        );
+                        ,"");
                 createDonateSite(site);
             }
         });
@@ -170,6 +208,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onSuccess(String documentId) {
                 Toast.makeText(DonateMapScreen.this,"Success creating new site", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override
@@ -183,7 +222,18 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
-                Toast.makeText(DonateMapScreen.this,"Your location", Toast.LENGTH_SHORT).show();
+                DonateSite site = (DonateSite) marker.getTag(); // Retrieve the DonateSite object from the tag
+                if (site != null) {
+                    try {
+                        showDonorPopup(site.getName(), site.getAddress(),site.getDonationStartTime(), site.getDonationEndTime(), site.getBloodCollectType(), String.valueOf(site.getAmountOfBlood()));
+                    }
+                    catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+
+                } else {
+                    Toast.makeText(DonateMapScreen.this, "No site information available", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });
@@ -236,7 +286,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
-    public void setUpSearchBar(){
+    public void setUpManager(){
 
         mapSearch.setVisibility(View.VISIBLE);
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -260,8 +310,12 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                                 double lng = location.getDouble("lng");
 
                                 LatLng locationLatLng = new LatLng(lat, lng);
-                                mMap.clear();
-                                mMap.addMarker(new MarkerOptions().position(locationLatLng).title(formattedAddress)
+
+                                if (currentMarker != null) {
+                                    currentMarker.remove();
+                                }
+
+                                currentMarker = mMap.addMarker(new MarkerOptions().position(locationLatLng).title(formattedAddress)
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationLatLng, 15));
 
@@ -286,6 +340,25 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
+    }
+
+    public void setUpDonationLocation() {
+        List<DonateSite> allSite = app.getAllDonateSite();
+
+        if (allSite == null || allSite.isEmpty()) {
+            Log.d("setUpDonationLocation", "No donation sites available.");
+            return;
+        }
+
+        for (DonateSite site : allSite) {
+            Log.d("setUpDonationLocation", "Checking site: " + site.getName() + " with status: " + site.getStatus());
+            if (site.getStatus().equals("Open Register") || site.getStatus().equals("Open Volunteer")) {
+                Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(site.getLatitude(), site.getLongitude()))
+                        .title(site.getName()));
+                marker.setTag(site);
+                Log.d("setUpDonationLocation", "Added marker for site: " + site.getName());
+            }
+        }
     }
 
     public void setupFooter() {

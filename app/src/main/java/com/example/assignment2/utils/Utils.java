@@ -6,14 +6,16 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.assignment2.Application;
 import com.example.assignment2.main_screen.DonateMapScreen;
 import com.example.assignment2.models.DonateRegister;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class Utils {
-
+    Application app = new Application();
     public double getUserTotalBloodAmount(List<DonateRegister> donateRegisters, String ID) {
         double total = 0;
 
@@ -88,6 +90,17 @@ public class Utils {
             // If hours are the same, compare minutes
             return startMinute < endMinute;
         }
+    }
+
+    public List<DonateRegister> getUserRegister(List<DonateRegister> list){
+        List<DonateRegister> result = new ArrayList<>();
+        String userId = app.getCurrentUser().getUserId();
+        for(DonateRegister register : list){
+            if(register.getUserID().equals(userId)){
+                result.add(register);
+            }
+        }
+        return result;
     }
 
 }
