@@ -14,9 +14,11 @@ public class VolunteerRegister {
     private String lastName;
     private String phone;
     private String gID;
+
+    private String managerPhone;
     public VolunteerRegister() {}
 
-    public VolunteerRegister(String userID, String donateSiteId, String status, String dateRegister, String timeRegister, String id, String firstName, String lastName, String phone, String gID) {
+    public VolunteerRegister(String userID, String donateSiteId, String status, String dateRegister, String timeRegister, String id, String firstName, String lastName, String phone, String gID, String managerPhone) {
         this.userID = userID;
         this.donateSiteId = donateSiteId;
         this.status = status;
@@ -27,6 +29,14 @@ public class VolunteerRegister {
         this.lastName = lastName;
         this.phone = phone;
         this.gID = gID;
+    }
+
+    public String getManagerPhone() {
+        return managerPhone;
+    }
+
+    public void setManagerPhone(String managerPhone) {
+        this.managerPhone = managerPhone;
     }
 
     public String getFirstName() {

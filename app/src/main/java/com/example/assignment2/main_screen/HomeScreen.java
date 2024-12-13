@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.assignment2.Application;
 import com.example.assignment2.R;
 import com.example.assignment2.models.DonateSite;
+import com.example.assignment2.models.VolunteerRegister;
 import com.example.assignment2.utils.Utils;
 import com.example.assignment2.list_screen.DonationRecord;
 import com.example.assignment2.list_screen.VolunteerRecord;
@@ -38,58 +39,48 @@ public class HomeScreen extends AppCompatActivity {
         donate_num = findViewById(R.id.donate_num);
         amountDonate = findViewById(R.id.blood_donated);
 
-        updateUIWithData();
         getData();
         setupFooter();
         setNavigateTextView();
     }
 
 
-    public void updateUIWithData(){
-        FirebaseUser currentUser = app.getCurrentUserFirebase();
-        if (currentUser != null) {
-
-            app.getCurrentUserData(currentUser, new Application.UserDataCallback() {
-                @Override
-                public void onSuccess(User userData) {
-                    app.setCurrentUser(userData);
-                    updateLabel(app.getCurrentUser());
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    System.out.println("HomeScreen" +  "Error fetching user data:" + e);
-                }
-            });
-
-            app.getUserRegisterData(currentUser, new Application.UserRegisterDonateCallback() {
-                @Override
-                public void onSuccess(List<DonateRegister> donateRegisters) {
-                    try {
-                        app.setUserDonateRegister(donateRegisters);
-                        updateTotalBloodAmount(app.getUserDonateRegister(), currentUser);
-                    }
-                    catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    System.out.println("HomeScreen" +  "Error fetching user data:" + e);
-                }
-            });
-
-
-        } else {
-            System.out.println("No user data sign in");
-        }
-    }
-
     public void getData() {
         try {
             FirebaseUser currentUser = app.getCurrentUserFirebase();
             if (currentUser != null) {
+
+                app.getCurrentUserData(currentUser, new Application.UserDataCallback() {
+                    @Override
+                    public void onSuccess(User userData) {
+                        app.setCurrentUser(userData);
+                        updateLabel(app.getCurrentUser());
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        System.out.println("HomeScreen" +  "Error fetching user data:" + e);
+                    }
+                });
+
+                app.getDonateRegisterData(currentUser, new Application.UserRegisterDonateCallback() {
+                    @Override
+                    public void onSuccess(List<DonateRegister> donateRegisters) {
+                        try {
+                            app.setUserDonateRegister(donateRegisters);
+                            updateTotalBloodAmount(app.getUserDonateRegister(), currentUser);
+                        }
+                        catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        System.out.println("HomeScreen" +  "Error fetching user data:" + e);
+                    }
+                });
+
                 app.getSiteData(currentUser, new Application.SiteDataCallBack() {
                     @Override
                     public void onSuccess(List<DonateSite> donateSites) {
@@ -101,6 +92,19 @@ public class HomeScreen extends AppCompatActivity {
                         Log.e("HomeScreen", "Error fetching user data:", e);
                     }
                 });
+
+
+                app.getVolunteerRegisterData(currentUser, new Application.UserRegisterVolunteerCallback() {
+                    @Override
+                    public void onSuccess(List<VolunteerRegister> volunteerRegisters) {
+                        app.setUserVolunteerRegister(volunteerRegisters);
+                    }
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
             } else {
                 Log.d("HomeScreen", "No user data sign in");
             }

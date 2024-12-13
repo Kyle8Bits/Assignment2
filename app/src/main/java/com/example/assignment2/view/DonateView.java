@@ -20,8 +20,8 @@ public class DonateView extends RecyclerView.ViewHolder {
 
     public DonateView(@NonNull View itemView) {
         super(itemView);
-        donationSiteName =  itemView.findViewById(R.id.donationSiteName);
-        date = itemView.findViewById(R.id.date);
+        donationSiteName =  itemView.findViewById(R.id.siteNamVLT);
+        date = itemView.findViewById(R.id.phoneManager);
         bloodAmount = itemView.findViewById(R.id.bloodAmount);
         status = itemView.findViewById(R.id.status);
         buttons = itemView.findViewById(R.id.buttonLayout);

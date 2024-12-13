@@ -24,7 +24,7 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
         this.context = context;
         this.donateList = donateList;
     }
-    @NonNull
+    @NonNull 
     @Override
     public DonateView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new DonateView(LayoutInflater.from(context).inflate(R.layout.donation_card_layout, parent, false));

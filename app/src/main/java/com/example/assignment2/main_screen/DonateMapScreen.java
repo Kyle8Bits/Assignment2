@@ -171,7 +171,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                     public void onClick(View view) {
                         VolunteerRegister volunteerRegister = new VolunteerRegister(app.getCurrentUser().getUserId(), site.getSiteId(), "WAITING",
                                 site.getDate(), site.getDonationStartTime(),"" ,app.getCurrentUser().getFirstName(), app.getCurrentUser().getLastName(),
-                                app.getCurrentUser().getPhone(), app.getCurrentUser().getIdNumber());
+                                app.getCurrentUser().getPhone(), app.getCurrentUser().getIdNumber(), site.getPhone());
                         registerVolunteer(volunteerRegister);
                         createForm.dismiss();
                     }

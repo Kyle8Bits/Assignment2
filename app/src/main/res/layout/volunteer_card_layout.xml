@@ -15,7 +15,29 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Date:"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/dateVLT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text="8 December 2024"
+            android:textColor="@color/red" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,7 +47,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/donationSiteName"
+            android:id="@+id/siteNamVLT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
@@ -36,20 +58,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/ammountCollected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/roboto_bold"
-            android:text="Date:"
+            android:text="Site contact:"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/phoneManager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"

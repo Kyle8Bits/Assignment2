@@ -1,34 +1,31 @@
 package com.example.assignment2.list_screen;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.assignment2.Application;
 import com.example.assignment2.R;
-import com.example.assignment2.main_screen.DonateMapScreen;
-import com.example.assignment2.main_screen.ProfileScreen;
+import com.example.assignment2.adapter.DonateAdapter;
+import com.example.assignment2.adapter.VolunteerAdapter;
+import com.example.assignment2.utils.Utils;
 
 public class VolunteerRecord extends AppCompatActivity {
     TextView name;
     FrameLayout goBack;
+    Utils utils = new Utils();
+    Application app = new Application();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.donation_record_layout);
+        setContentView(R.layout.list_of_card_layout);
         name = findViewById(R.id.listName);
-
-
         name.setText("Volunteer record");
-
         goBack = findViewById(R.id.goBack);
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +33,13 @@ public class VolunteerRecord extends AppCompatActivity {
                 finish();
             }
         });
+
+        RecyclerView recyclerView = findViewById(R.id.donateRCV);
+        recyclerView.setLayoutManager(new LinearLayoutManager(VolunteerRecord.this));
+
+        VolunteerAdapter adapter = new VolunteerAdapter(VolunteerRecord.this, utils.getUserVolunteerRegister(app.getUserVolunteerRegister()));
+        recyclerView.setAdapter(adapter);
+
     }
 
 }

@@ -29,11 +29,10 @@ import java.util.Map;
 public class Application {
     private static User currentUser;
     private static List<DonateRegister> userDonateRegister;
-    private static List<VolunteerRegister> userVolunteer;
+    private static List<VolunteerRegister> userVolunteerRegister;
     private static List<DonateSite> allDonateSite;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth auth = FirebaseAuth.getInstance();
-
     FirebaseUser currentUserFirebase = auth.getCurrentUser();
 
     public FirebaseUser getCurrentUserFirebase() {
@@ -44,73 +43,36 @@ public class Application {
         return userDonateRegister;
     }
 
-    public void setUserDonateRegister(List<DonateRegister> userDonateRegister) {
-        this.userDonateRegister = userDonateRegister;
-    }
-
     public User getCurrentUser() {
         return currentUser;
     }
 
     public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        Application.currentUser = currentUser;
+    }
+
+    public void setUserDonateRegister(List<DonateRegister> userDonateRegister) {
+        Application.userDonateRegister = userDonateRegister;
+    }
+
+    public List<VolunteerRegister> getUserVolunteerRegister() {
+        return userVolunteerRegister;
+    }
+
+    public void setUserVolunteerRegister(List<VolunteerRegister> userVolunteerRegister) {
+        Application.userVolunteerRegister = userVolunteerRegister;
     }
 
     public List<DonateSite> getAllDonateSite() {
         return allDonateSite;
     }
 
-    public void setAllDonateSite(List<DonateSite> allDonateSite) {
-        this.allDonateSite = allDonateSite;
+    public static void setAllDonateSite(List<DonateSite> allDonateSite) {
+        Application.allDonateSite = allDonateSite;
     }
 
-    //Get register
-    public void getUserRegisterData(FirebaseUser user, final UserRegisterDonateCallback callback) {
-        if (user != null) {
-            db.collection("donate_registers")
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<DonateRegister> donateRegisters = new ArrayList<>();
-                        queryDocumentSnapshots.forEach(documentSnapshot -> {
-                            Map<String, Object> data = documentSnapshot.getData();
-                            DonateRegister donateRegister = new DonateRegister(
-                                    data.get("donateSiteId").toString(),
-                                    data.get("userID").toString(),
-                                    data.get("timeRegister").toString(),
-                                    data.get("dateRegister").toString(),
-                                    data.get("bloodType").toString(),
-                                    data.get("lastName").toString(),
-                                    data.get("firstName").toString(),
-                                    data.get("dob").toString(),
-                                    data.get("governmentID").toString(),
-                                    documentSnapshot.getDouble("donationAmount"),
-                                    data.get("status").toString(),
-                                    data.get("siteName").toString(),
-                                    documentSnapshot.getId()
-                            );
-                            donateRegisters.add(donateRegister);
-                        });
-                        this.userDonateRegister = donateRegisters;
-
-                        callback.onSuccess(userDonateRegister);
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.w("Firestore", "Error getting donations", e);
-                        callback.onFailure(e);  // Notify failure
-                    });
-        } else {
-            // No user is signed in
-            Log.d("Firebase", "No user is signed in");
-            callback.onFailure(new Exception("No user signed in"));
-        }
-    }
-    public interface UserRegisterDonateCallback{
-        void onSuccess(List<DonateRegister> donateRegisters);
-        void onFailure(Exception e);
-    }
-
-
-    //Get current user data
+    //-----------------------GET-------------------------------//
+    //FEATCH current user data
     public void getCurrentUserData(FirebaseUser user, final UserDataCallback callback) {
         if (user != null) {
             db.collection("users")
@@ -155,7 +117,95 @@ public class Application {
         void onFailure(Exception e);
     }
 
-    //get site data
+    //FEATCH donate register
+    public void getDonateRegisterData(FirebaseUser user, final UserRegisterDonateCallback callback) {
+        if (user != null) {
+            db.collection("donate_registers")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<DonateRegister> donateRegisters = new ArrayList<>();
+                        queryDocumentSnapshots.forEach(documentSnapshot -> {
+                            Map<String, Object> data = documentSnapshot.getData();
+                            DonateRegister donateRegister = new DonateRegister(
+                                    data.get("donateSiteId").toString(),
+                                    data.get("userID").toString(),
+                                    data.get("timeRegister").toString(),
+                                    data.get("dateRegister").toString(),
+                                    data.get("bloodType").toString(),
+                                    data.get("lastName").toString(),
+                                    data.get("firstName").toString(),
+                                    data.get("dob").toString(),
+                                    data.get("governmentID").toString(),
+                                    documentSnapshot.getDouble("donationAmount"),
+                                    data.get("status").toString(),
+                                    data.get("siteName").toString(),
+                                    documentSnapshot.getId()
+                            );
+                            donateRegisters.add(donateRegister);
+                        });
+                        this.userDonateRegister = donateRegisters;
+
+                        callback.onSuccess(userDonateRegister);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firestore", "Error getting donations", e);
+                        callback.onFailure(e);  // Notify failure
+                    });
+        } else {
+            // No user is signed in
+            Log.d("Firebase", "No user is signed in");
+            callback.onFailure(new Exception("No user signed in"));
+        }
+    }
+    public interface UserRegisterDonateCallback{
+        void onSuccess(List<DonateRegister> donateRegisters);
+        void onFailure(Exception e);
+    }
+
+//    //FEATCH volunteer register
+    public void getVolunteerRegisterData(FirebaseUser user, final UserRegisterVolunteerCallback callback){
+        if (user != null) {
+            db.collection("volunteer_registers")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<VolunteerRegister> volunteerRegisters = new ArrayList<>();
+                        queryDocumentSnapshots.forEach(documentSnapshot -> {
+                            Map<String, Object> data = documentSnapshot.getData();
+                            VolunteerRegister volunteerRegister = new VolunteerRegister(
+                                    data.get("userID").toString(),
+                                    data.get("donateSiteId").toString(),
+                                    data.get("status").toString(),
+                                    data.get("dateRegister").toString(),
+                                    data.get("timeRegister").toString(),
+                                    data.get("ID").toString(),
+                                    data.get("firstName").toString(),
+                                    data.get("lastName").toString(),
+                                    data.get("phone").toString(),
+                                    data.get("gID").toString(),
+                                    data.get("managerPhone").toString()
+                            );
+                            volunteerRegisters.add(volunteerRegister);
+                        });
+                        this.userVolunteerRegister = volunteerRegisters;
+
+                        callback.onSuccess(userVolunteerRegister);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("Firestore", "Error getting donations", e);
+                        callback.onFailure(e);  // Notify failure
+                    });
+        } else {
+            // No user is signed in
+            Log.d("Firebase", "No user is signed in");
+            callback.onFailure(new Exception("No user signed in"));
+        }
+    }
+    public interface UserRegisterVolunteerCallback{
+        void onSuccess(List<VolunteerRegister> volunteerRegisters);
+        void onFailure(Exception e);
+    }
+
+    //FEATCH site data
     public void getSiteData(FirebaseUser user, final SiteDataCallBack callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         if (user != null) {
@@ -208,7 +258,8 @@ public class Application {
     }
 
 
-    //create new site
+    //---------------PUT---------------------//
+    //PUT new site
     public void createNewSite(DonateSite newSite, final CreateSiteCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference sitesCollection = db.collection("sites");
@@ -255,7 +306,7 @@ public class Application {
         void onFailure(Exception e);
     }
 
-    //create new donate register
+    //PUT new donate register
     public void createNewDonateRegister(DonateRegister donateRegister, final CreateDonateRegisterCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference sitesCollection = db.collection("donate_registers");
@@ -297,7 +348,7 @@ public class Application {
         void onFailure(Exception e);
     }
 
-    //create new volunteer register
+    //PUT new volunteer register
     public void createNewVolunteerRegister(VolunteerRegister volunteerRegister, final CreateVolunteerRegisterCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference volunteer_registers_clt = db.collection("volunteer_registers");
@@ -315,6 +366,7 @@ public class Application {
         register.put("lastName", volunteerRegister.getLastName());
         register.put("phone", volunteerRegister.getPhone());
         register.put("gID", volunteerRegister.getgID());
+        register.put("ID", newSiteRef.getId());
 
        volunteer_registers_clt.add(register)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -330,9 +382,12 @@ public class Application {
                     }
                 });
     };
-
     public interface CreateVolunteerRegisterCallback {
         void onSuccess(String documentId);
         void onFailure(Exception e);
     }
+
+
+
+
 }

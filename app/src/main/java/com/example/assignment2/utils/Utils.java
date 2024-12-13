@@ -9,6 +9,7 @@ import android.widget.TimePicker;
 import com.example.assignment2.Application;
 import com.example.assignment2.main_screen.DonateMapScreen;
 import com.example.assignment2.models.DonateRegister;
+import com.example.assignment2.models.VolunteerRegister;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,10 +93,21 @@ public class Utils {
         }
     }
 
-    public List<DonateRegister> getUserRegister(List<DonateRegister> list){
+    public List<DonateRegister> getUserDonateRegister(List<DonateRegister> list){
         List<DonateRegister> result = new ArrayList<>();
         String userId = app.getCurrentUser().getUserId();
         for(DonateRegister register : list){
+            if(register.getUserID().equals(userId)){
+                result.add(register);
+            }
+        }
+        return result;
+    }
+
+    public List<VolunteerRegister> getUserVolunteerRegister(List<VolunteerRegister> list){
+        List<VolunteerRegister> result = new ArrayList<>();
+        String userId = app.getCurrentUser().getUserId();
+        for(VolunteerRegister register : list){
             if(register.getUserID().equals(userId)){
                 result.add(register);
             }
