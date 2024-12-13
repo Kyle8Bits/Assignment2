@@ -11,17 +11,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assignment2.Application;
 import com.example.assignment2.R;
+import com.example.assignment2.list_screen.SiteRecord;
 import com.example.assignment2.models.User;
 
 public class ManagerScreen extends AppCompatActivity {
     Application app = new Application();
+    TextView manager;
     Button create, view;
     User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_screen);
-        app.getCurrentUser();
+        manager = findViewById(R.id.managerName);
+        user = app.getCurrentUser();
+        manager.setText("Hi manager " + user.getFirstName() + ",");
         setUpButton();
         setupFooter();
     }
@@ -34,6 +38,14 @@ public class ManagerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ManagerScreen.this, DonateMapScreen.class);
+                startActivity(intent);
+            }
+        });
+
+        view.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ManagerScreen.this, SiteRecord.class);
                 startActivity(intent);
             }
         });

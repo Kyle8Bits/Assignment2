@@ -69,7 +69,7 @@ public class RegisterScreen extends AppCompatActivity {
         String idNumberText = idNumber.getText().toString().trim();
         String bloodTypeInput = bloodType;
 
-        if (emailText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty()) {
+        if (emailText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty() || bloodTypeInput.equals("Select Blood Type")) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }

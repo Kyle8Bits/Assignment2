@@ -29,6 +29,18 @@ public class Utils {
         return total;
     }
 
+    public int getUserTotalDonations(List<DonateRegister> donateRegisters, String ID) {
+        int total = 0;
+
+        for (DonateRegister donateRegister : donateRegisters) {
+            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("DONE")) {
+                total += 1;
+            }
+        }
+
+        return total;
+    }
+
     public void showDatePicker(EditText date, Context context) {
         // Get the current date to show it as default
         Calendar calendar = Calendar.getInstance();

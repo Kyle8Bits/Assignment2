@@ -39,12 +39,15 @@ public class HomeScreen extends AppCompatActivity {
         donate_num = findViewById(R.id.donate_num);
         amountDonate = findViewById(R.id.blood_donated);
 
-        getData();
         setupFooter();
         setNavigateTextView();
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+    }
     public void getData() {
         try {
             FirebaseUser currentUser = app.getCurrentUserFirebase();
@@ -67,8 +70,9 @@ public class HomeScreen extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<DonateRegister> donateRegisters) {
                         try {
+                            System.out.println("Get from screen ");
                             app.setUserDonateRegister(donateRegisters);
-                            updateTotalBloodAmount(app.getUserDonateRegister(), currentUser);
+                            updateTotalBloodAmount(donateRegisters, currentUser);
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());
@@ -90,18 +94,6 @@ public class HomeScreen extends AppCompatActivity {
                     @Override
                     public void onFailure(Exception e) {
                         Log.e("HomeScreen", "Error fetching user data:", e);
-                    }
-                });
-
-
-                app.getVolunteerRegisterData(currentUser, new Application.UserRegisterVolunteerCallback() {
-                    @Override
-                    public void onSuccess(List<VolunteerRegister> volunteerRegisters) {
-                        app.setUserVolunteerRegister(volunteerRegisters);
-                    }
-                    @Override
-                    public void onFailure(Exception e) {
-
                     }
                 });
 
@@ -127,6 +119,8 @@ public class HomeScreen extends AppCompatActivity {
     public void updateTotalBloodAmount(List<DonateRegister> donateRegisters, FirebaseUser currentUser) {
         double amount = utils.getUserTotalBloodAmount(donateRegisters, currentUser.getUid());
         amountDonate.setText(String.valueOf(amount));
+        int timeDone = utils.getUserTotalDonations(donateRegisters, currentUser.getUid());
+        donate_num.setText(String.valueOf(timeDone));
     }
 
     public void setupFooter() {

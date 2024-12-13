@@ -19,10 +19,12 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
 
     Context context;
     List<DonateRegister> donateList;
+    onCancelListener onCancelListener;
 
-    public DonateAdapter(Context context, List<DonateRegister> donateList) {
+    public DonateAdapter(Context context, List<DonateRegister> donateList, onCancelListener onCancelListener ) {
         this.context = context;
         this.donateList = donateList;
+        this.onCancelListener = onCancelListener;
     }
     @NonNull 
     @Override
@@ -32,6 +34,8 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
 
     @Override
     public void onBindViewHolder(@NonNull DonateView holder, int position) {
+        DonateRegister register = donateList.get(position);
+
         holder.donationSiteName.setText(donateList.get(position).getSiteName());
         holder.date.setText(donateList.get(position).getDateRegister());
         holder.bloodAmount.setText(String.valueOf(donateList.get(position).getDonationAmount()));
@@ -40,6 +44,15 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
             holder.buttons.setVisibility(View.VISIBLE);
             holder.status.setTextColor(Color.parseColor("#eb9234"));
             holder.time.setVisibility(View.VISIBLE);
+
+            holder.cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(onCancelListener != null){
+                        onCancelListener.onCancel(register);
+                    }
+                }
+            });
         }
 
         holder.timeRegis.setText(donateList.get(position).getTimeRegister());
@@ -50,5 +63,18 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
     @Override
     public int getItemCount() {
         return donateList.size();
+    }
+
+    public void removeDonateRegister(DonateRegister register) {
+        int position = donateList.indexOf(register);
+        if (position != -1) {
+            donateList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+
+    public interface onCancelListener{
+        void onCancel(DonateRegister register);
     }
 }

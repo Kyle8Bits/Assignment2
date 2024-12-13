@@ -5,30 +5,74 @@ import com.google.firebase.Timestamp;
 public class VolunteerRegister {
     private String userID;
     private String donateSiteId;
+
     private String status = "WAITING";
     private String dateRegister;
+
     private String timeRegister;
     private String id;
 
     private String firstName;
     private String lastName;
-    private String phone;
+
+    private String userPhone;
     private String gID;
 
+    private String siteName;
     private String managerPhone;
+
+    private String address;
+
     public VolunteerRegister() {}
 
-    public VolunteerRegister(String userID, String donateSiteId, String status, String dateRegister, String timeRegister, String id, String firstName, String lastName, String phone, String gID, String managerPhone) {
+    public VolunteerRegister(String userID,
+                             String donateSiteId,
+                             String status,
+                             String dateRegister,
+                             String timeRegister,
+                             String id,
+                             String firstName,
+                             String lastName,
+                             String phone,
+                             String gID,
+                             String managerPhone,
+                             String siteName,
+                             String address) {
         this.userID = userID;
         this.donateSiteId = donateSiteId;
+
         this.status = status;
         this.dateRegister = dateRegister;
+
         this.timeRegister = timeRegister;
         this.id = id;
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phone = phone;
+
+        this.userPhone = phone;
         this.gID = gID;
+
+        this.managerPhone = managerPhone;
+        this.siteName = siteName;
+
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
     }
 
     public String getManagerPhone() {
@@ -55,12 +99,12 @@ public class VolunteerRegister {
         this.lastName = lastName;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getUserPhone() {
+        return userPhone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setUserPhone(String phone) {
+        this.userPhone = phone;
     }
 
     public String getgID() {

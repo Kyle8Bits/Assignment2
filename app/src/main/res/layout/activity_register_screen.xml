@@ -251,7 +251,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
-            android:text="Please provided your medical condition or you can provide it later"
+            android:text="Please provided your medical condition"
             android:textColor="@color/red"
             android:textSize="15sp"
             tools:paddingLeft="10dp" />

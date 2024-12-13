@@ -134,7 +134,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/status"
+            android:id="@+id/timeVolunteer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
@@ -169,7 +169,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/buttonLayout"
+        android:id="@+id/vlt_buttons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"

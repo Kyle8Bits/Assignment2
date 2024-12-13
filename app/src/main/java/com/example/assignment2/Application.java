@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.protobuf.Value;
 
@@ -139,7 +140,7 @@ public class Application {
                                     documentSnapshot.getDouble("donationAmount"),
                                     data.get("status").toString(),
                                     data.get("siteName").toString(),
-                                    documentSnapshot.getId()
+                                    data.get("ID").toString()
                             );
                             donateRegisters.add(donateRegister);
                         });
@@ -173,16 +174,24 @@ public class Application {
                             Map<String, Object> data = documentSnapshot.getData();
                             VolunteerRegister volunteerRegister = new VolunteerRegister(
                                     data.get("userID").toString(),
-                                    data.get("donateSiteId").toString(),
+                                    data.get("volunteerSiteId").toString(),
+
                                     data.get("status").toString(),
                                     data.get("dateRegister").toString(),
+
                                     data.get("timeRegister").toString(),
                                     data.get("ID").toString(),
+
                                     data.get("firstName").toString(),
                                     data.get("lastName").toString(),
-                                    data.get("phone").toString(),
+
+                                    data.get("userPhone").toString(),
                                     data.get("gID").toString(),
-                                    data.get("managerPhone").toString()
+
+                                    data.get("managerPhone").toString(),
+                                    data.get("siteName").toString(),
+
+                                    data.get("address").toString()
                             );
                             volunteerRegisters.add(volunteerRegister);
                         });
@@ -326,7 +335,7 @@ public class Application {
         register.put("status", donateRegister.getStatus());
         register.put("donationAmount", donateRegister.getDonationAmount());
         register.put("governmentID", donateRegister.getGovernmentID());
-        register.put("registerId", newSiteRef.getId());
+        register.put("ID", newSiteRef.getId());
 
         // Add a new document with a generated ID
         sitesCollection.add(register)
@@ -334,6 +343,7 @@ public class Application {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         callback.onSuccess(documentReference.getId());
+                        addToSiteList("currentRegister", donateRegister.getDonateSiteId(), newSiteRef.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -342,6 +352,7 @@ public class Application {
                         callback.onFailure(e);
                     }
                 });
+
     }
     public interface CreateDonateRegisterCallback {
         void onSuccess(String documentId);
@@ -357,22 +368,31 @@ public class Application {
         // Create a new site object
         Map<String, Object> register = new HashMap<>();
         register.put("userID", volunteerRegister.getUserID());
-        register.put("donateSiteId", volunteerRegister.getDonateSiteId());
+        register.put("volunteerSiteId", volunteerRegister.getDonateSiteId());
+
         register.put("status", volunteerRegister.getStatus());
         register.put("timeRegister", volunteerRegister.getTimeRegister());
+
         register.put("dateRegister", volunteerRegister.getDateRegister());
-        register.put("registerId", newSiteRef.getId());
         register.put("firstName", volunteerRegister.getFirstName());
+
         register.put("lastName", volunteerRegister.getLastName());
-        register.put("phone", volunteerRegister.getPhone());
+        register.put("userPhone", volunteerRegister.getUserPhone());
+
         register.put("gID", volunteerRegister.getgID());
         register.put("ID", newSiteRef.getId());
+
+        register.put("managerPhone", volunteerRegister.getManagerPhone());
+        register.put("siteName", volunteerRegister.getSiteName());
+
+        register.put("address", volunteerRegister.getAddress());
 
        volunteer_registers_clt.add(register)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         callback.onSuccess(documentReference.getId());
+                        addToSiteList("currentVolunteer", volunteerRegister.getDonateSiteId(), newSiteRef.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -387,7 +407,92 @@ public class Application {
         void onFailure(Exception e);
     }
 
+    //DELETE donateRegister
+    public void deleteDonateRegister(DonateRegister register, final deleteDonationRegisterCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("donate_registers").document(register.getId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        removeFromSiteList("currentRegister", register.getDonateSiteId(), register.getId());
+                        callback.onSuccess();
 
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+    public interface deleteDonationRegisterCallback {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
 
+    //DELETE volunteer register
+    public void deleteVolunteerRegister(VolunteerRegister register, final deleteVolunteerRegisterCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("volunteer_registers").document(register.getId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        removeFromSiteList("currentVolunteer", register.getDonateSiteId(), register.getId());
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+    public interface deleteVolunteerRegisterCallback {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
 
+    //---------------POST------------------------//
+    //MODIFY the list volunteer and register in a site
+    public void addToSiteList(String field, String siteId, String newString) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("sites").document(siteId)
+                .update(field, FieldValue.arrayUnion(newString))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Handle success, e.g., show a toast message
+                        Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure, e.g., show a toast message
+                        Log.w("Firestore", "Error updating document", e);
+                    }
+                });
+    }
+    public void removeFromSiteList(String field, String siteId, String stringToRemove) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("sites").document(siteId)
+                .update(field, FieldValue.arrayRemove(stringToRemove))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Handle success, e.g., show a toast message
+                        System.out.println("Remove current list");
+                        Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure, e.g., show a toast message
+                        Log.w("Firestore", "Error updating document", e);
+                    }
+                });
+    }
 }

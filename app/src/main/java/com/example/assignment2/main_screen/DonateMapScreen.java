@@ -150,7 +150,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         timeStart.setText(site.getDonationStartTime());
         timeEnd.setText(site.getDonationEndTime());
         bloodType.setText(site.getBloodCollectType());
-        amountCl.setText(site.getAmountOfBlood() + " Litres");
+        amountCl.setText(site.getAmountOfBlood() + " mL");
 
         donateRe.setOnClickListener(
                 new View.OnClickListener() {
@@ -160,7 +160,8 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                                 site.getBloodCollectType(), app.getCurrentUser().getLastName(), app.getCurrentUser().getFirstName(), app.getCurrentUser().getDob(),
                                 app.getCurrentUser().getIdNumber(), 0, "WAITING", site.getName(),"");
 
-                        registerDonate(donateRegister);
+                        registerDonate(donateRegister, site.getSiteId());
+
                         createForm.dismiss();
                     }
                 });
@@ -169,9 +170,28 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        VolunteerRegister volunteerRegister = new VolunteerRegister(app.getCurrentUser().getUserId(), site.getSiteId(), "WAITING",
-                                site.getDate(), site.getDonationStartTime(),"" ,app.getCurrentUser().getFirstName(), app.getCurrentUser().getLastName(),
-                                app.getCurrentUser().getPhone(), app.getCurrentUser().getIdNumber(), site.getPhone());
+                        VolunteerRegister volunteerRegister = new VolunteerRegister(
+                                app.getCurrentUser().getUserId(),
+                                site.getSiteId(),
+
+                                "WAITING",
+                                site.getDate(),
+
+                                site.getDonationStartTime(),
+                                "" ,
+
+                                app.getCurrentUser().getFirstName(),
+                                app.getCurrentUser().getLastName(),
+
+                                app.getCurrentUser().getPhone(),
+                                app.getCurrentUser().getIdNumber(),
+
+                                site.getPhone(),
+                                site.getName(),
+
+                                site.getAddress());
+
+
                         registerVolunteer(volunteerRegister);
                         createForm.dismiss();
                     }
@@ -180,7 +200,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
 
     }
 
-    public void registerDonate(DonateRegister register){
+    public void registerDonate(DonateRegister register, String siteID){
         app.createNewDonateRegister(register, new Application.CreateDonateRegisterCallback(){
             @Override
             public void onSuccess(String documentId) {
@@ -191,6 +211,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 Toast.makeText(DonateMapScreen.this,"Fail creating new register", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     public void registerVolunteer(VolunteerRegister vlt_register){
