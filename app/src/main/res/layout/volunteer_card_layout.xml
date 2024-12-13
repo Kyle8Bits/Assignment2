@@ -27,7 +27,7 @@
             android:id="@+id/dateVLT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="8 December 2024"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -50,7 +50,7 @@
             android:id="@+id/siteNameVLT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="VinMec"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -73,7 +73,7 @@
             android:id="@+id/contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="8 December 2024"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="8 December 2024"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -157,7 +157,7 @@
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="Completed"
             android:textColor="@color/green" />
     </LinearLayout>

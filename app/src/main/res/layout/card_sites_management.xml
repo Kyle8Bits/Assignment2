@@ -2,12 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_site_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="@drawable/round_corner_bg"
+    android:clickable="true"
+    android:gravity="end"
     android:orientation="vertical"
     android:padding="10dp">
+
+    <Button
+        android:id="@+id/closeSite"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/grey"
+        android:text="Close This Site"
+        android:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +38,7 @@
             android:id="@+id/locationBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="VinMec"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -50,7 +61,7 @@
             android:id="@+id/timeStart_End"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="10:00 - 13:00"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -58,7 +69,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -71,10 +81,32 @@
             android:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/managerPhone"
+            android:id="@+id/bloodMn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
+            android:text="N/A"
+            android:textColor="@color/red" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Address:"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/addressMn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
             android:text="N/A"
             android:textColor="@color/red" />
     </LinearLayout>
@@ -85,30 +117,30 @@
 
         <ImageView
             android:id="@+id/red_line"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@drawable/red_line" />
+            android:background="@drawable/red_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/green_line"
+            android:layout_width="150dp"
+            android:layout_height="3dp"
+            android:background="@drawable/green_line"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="150dp"
-            android:layout_height="3dp"
-            android:background="@drawable/green_line" />
+            tools:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
             android:id="@+id/dark_red_line"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="130dp"
             android:layout_height="3dp"
-            android:background="@drawable/darkred_line" />
+            android:background="@drawable/darkred_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,7 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/roboto_light"
+        android:fontFamily="@font/roboto_bold"
         android:gravity="center_horizontal"
         android:text="Volunteer in this site"
         android:textColor="@color/red"
@@ -129,12 +161,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/managerVolunteerButton"
+            android:id="@+id/managerAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text="Volunteer Now" />
+            android:elevation="3dp"
+            android:text="Volunteer Now"
+            android:visibility="visible" />
 
     </LinearLayout>
 

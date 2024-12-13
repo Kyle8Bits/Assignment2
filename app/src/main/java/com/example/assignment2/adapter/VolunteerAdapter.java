@@ -1,6 +1,7 @@
 package com.example.assignment2.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,10 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerView> {
         holder.address.setText(volunteerList.get(position).getAddress());
         holder.status.setText(volunteerList.get(position).getStatus());
 
-        if(!volunteerList.get(position).getStatus().equals("Completed")){
+        if(!volunteerList.get(position).getStatus().equals("COMPLETED")){
             holder.buttons.setVisibility(View.VISIBLE);
             holder.timeLayout.setVisibility(View.VISIBLE);
+            holder.status.setTextColor(Color.parseColor("#eb9234"));
             holder.time.setText(volunteerList.get(position).getTimeRegister());
 
             holder.cancel.setOnClickListener(new View.OnClickListener() {

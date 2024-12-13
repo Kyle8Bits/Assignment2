@@ -261,7 +261,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         create.setOnClickListener(v -> {
             if (amount.getText().toString().isEmpty() || date.getText().toString().isEmpty() ||
                     start.getText().toString().isEmpty() || end.getText().toString().isEmpty() ||
-                    bloodType.getSelectedItem() == null ) {
+                    bloodType.getSelectedItem().toString().equals("Select Blood Type")) {
                 Toast.makeText(DonateMapScreen.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
 
             } else if (!utils.isTimeLogical(start.getText().toString(), end.getText().toString())) {

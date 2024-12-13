@@ -9,6 +9,7 @@ import android.widget.TimePicker;
 import com.example.assignment2.Application;
 import com.example.assignment2.main_screen.DonateMapScreen;
 import com.example.assignment2.models.DonateRegister;
+import com.example.assignment2.models.DonateSite;
 import com.example.assignment2.models.VolunteerRegister;
 
 import java.util.ArrayList;
@@ -127,4 +128,14 @@ public class Utils {
         return result;
     }
 
+    public List<DonateSite> getSiteForManager(List<DonateSite> list) {
+        List<DonateSite> result = new ArrayList<>();
+        String userId = app.getCurrentUser().getUserId();
+        for (DonateSite site : list) {
+            if (site.getManagerUID().equals(userId)) {
+                result.add(site);
+            }
+        }
+        return result;
+    }
 }

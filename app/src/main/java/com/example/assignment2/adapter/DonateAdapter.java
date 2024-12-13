@@ -40,7 +40,7 @@ public class DonateAdapter extends RecyclerView.Adapter<DonateView> {
         holder.date.setText(donateList.get(position).getDateRegister());
         holder.bloodAmount.setText(String.valueOf(donateList.get(position).getDonationAmount()));
 
-        if(!donateList.get(position).getStatus().equals("DONE")){
+        if(!donateList.get(position).getStatus().equals("COMPLETED")){
             holder.buttons.setVisibility(View.VISIBLE);
             holder.status.setTextColor(Color.parseColor("#eb9234"));
             holder.time.setVisibility(View.VISIBLE);

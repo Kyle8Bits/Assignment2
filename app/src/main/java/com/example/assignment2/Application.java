@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.assignment2.list_screen.SiteRecord;
 import com.example.assignment2.main_screen.DonateMapScreen;
 import com.example.assignment2.models.DonateRegister;
 import com.example.assignment2.models.DonateSite;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.protobuf.Value;
@@ -240,7 +242,7 @@ public class Application {
                                         data.get("end").toString(),
                                         (double) data.get("amount"),
                                         data.get("bloodType").toString(),
-                                        documentSnapshot.getId()
+                                        data.get("siteId").toString()
                                 );
                                 donateSites.add(donateSite);
                             } catch (Exception e) {
@@ -263,6 +265,55 @@ public class Application {
     public interface SiteDataCallBack {
         void onSuccess(List<DonateSite> donateSites);
 
+        void onFailure(Exception e);
+    }
+
+    //FEATCH volunteer register in a site
+    public void getVolunteerRegisterInSite(String site, final VolunteerFromSite callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("volunteer_registers").whereEqualTo("volunteerSiteId", site).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<VolunteerRegister> volunteerRegisters = new ArrayList<>();
+                    queryDocumentSnapshots.forEach( documentSnapshot -> {
+                                try {
+                                    Map<String, Object> data = documentSnapshot.getData();
+                                    VolunteerRegister volunteerRegister = new VolunteerRegister(
+                                            data.get("userID").toString(),
+                                            data.get("volunteerSiteId").toString(),
+
+                                            data.get("status").toString(),
+                                            data.get("dateRegister").toString(),
+
+                                            data.get("timeRegister").toString(),
+                                            data.get("ID").toString(),
+
+                                            data.get("firstName").toString(),
+                                            data.get("lastName").toString(),
+
+                                            data.get("userPhone").toString(),
+                                            data.get("gID").toString(),
+
+                                            data.get("managerPhone").toString(),
+                                            data.get("siteName").toString(),
+
+                                            data.get("address").toString()
+                                    );
+                                    volunteerRegisters.add(volunteerRegister);
+                                } catch (Exception e) {
+                                    Log.e("Firestore", "Error parsing document: " + documentSnapshot.getId(), e);
+                                }
+                    });
+
+                    callback.onSuccess(volunteerRegisters);
+
+                }).addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error getting donations", e);
+                    callback.onFailure(e);  // Notify failure
+                });
+    }
+
+    public interface VolunteerFromSite{
+        void onSuccess(List<VolunteerRegister> volunteerRegisters);
         void onFailure(Exception e);
     }
 
@@ -314,7 +365,6 @@ public class Application {
         void onSuccess(String documentId);
         void onFailure(Exception e);
     }
-
     //PUT new donate register
     public void createNewDonateRegister(DonateRegister donateRegister, final CreateDonateRegisterCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -407,6 +457,8 @@ public class Application {
         void onFailure(Exception e);
     }
 
+
+    //-------------DELETE-------------------//
     //DELETE donateRegister
     public void deleteDonateRegister(DonateRegister register, final deleteDonationRegisterCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -454,45 +506,157 @@ public class Application {
         void onFailure(Exception e);
     }
 
+    //DELETE manager register volunteer
+    public void deleteVolunteerRegFromSite(DonateSite donateSite, String currentManagerID, final deleteVolunteerRegFromSiteCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("volunteer_registers")
+                .whereEqualTo("userID", currentManagerID)
+                .whereEqualTo("volunteerSiteId", donateSite.getSiteId())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        String documentId = document.getString("ID");
+                        document.getReference().delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Firestore", "DocumentSnapshot successfully deleted!");
+
+                                    removeFromSiteList("currentVolunteer", donateSite.getSiteId(), documentId);
+                                    // Check if all documents are processed
+                                    callback.onSuccess();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error deleting document", e);
+                                    callback.onFailure(e);
+                                });
+                    }
+                    // If no documents were found
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error finding document", e);
+                    callback.onFailure(e);
+                });
+    }
+    public interface deleteVolunteerRegFromSiteCallback {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
+
+    //CLOSE a sites and other information
+
+    public void closeSite(DonateSite site, final closeSiteCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("sites").whereEqualTo("siteId", site.getSiteId())
+                .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    final List<String> volunteerList = new ArrayList<>();
+                    final List<String> leftOverDonor = new ArrayList<>();
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Assuming you want to update the first document found
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        DocumentReference documentReference = documentSnapshot.getReference();
+
+                        if (documentSnapshot.contains("currentRegister")) {
+                            List<String> currentRegister = (List<String>) documentSnapshot.get("currentRegister");
+                            leftOverDonor.addAll(new ArrayList<>(currentRegister)); // Make a deep copy
+                        }
+                        if (documentSnapshot.contains("currentVolunteer")) {
+                            List<String> currentVolunteer = (List<String>) documentSnapshot.get("currentVolunteer");
+                            volunteerList.addAll(new ArrayList<>(currentVolunteer)); // Make a deep copy
+                        }
+                        documentReference.update("status", "CLOSE")
+                                .addOnSuccessListener(aVoid -> {
+                                    updateStatusInCollections(db, volunteerList, leftOverDonor, callback);
+                                })
+                                .addOnFailureListener(e -> {
+                                    callback.onFailure(e);
+                                });
+                    } else {
+                        callback.onFailure(new Exception("No documents found"));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e);
+                });
+    }
+
+    private void updateStatusInCollections(FirebaseFirestore db, List<String> volunteerList, List<String> leftOverDonor, closeSiteCallback callback) {
+        // Update status in volunteer_register collection
+        for (String id : volunteerList) {
+            db.collection("volunteer_registers").whereEqualTo("ID", id)
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                            documentSnapshot.getReference().update("status", "COMPLETED")
+                                    .addOnFailureListener(callback::onFailure);
+                        }
+                    }).addOnFailureListener(callback::onFailure);
+        }
+
+        // Update status in donate_register collection
+        for (String id : leftOverDonor) {
+            db.collection("donate_registers").whereEqualTo("ID", id)
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                            documentSnapshot.getReference().update("status", "COMPLETED")
+                                    .addOnFailureListener(callback::onFailure);
+                        }
+                    }).addOnFailureListener(callback::onFailure);
+        }
+
+        // Call onSuccess after updating all documents
+        callback.onSuccess();
+    }
+
+    public interface closeSiteCallback {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
+
     //---------------POST------------------------//
     //MODIFY the list volunteer and register in a site
     public void addToSiteList(String field, String siteId, String newString) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("sites").document(siteId)
-                .update(field, FieldValue.arrayUnion(newString))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Handle success, e.g., show a toast message
-                        Log.d("Firestore", "DocumentSnapshot successfully updated!");
+        db.collection("sites").whereEqualTo("siteId", siteId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        document.getReference().update(field, FieldValue.arrayUnion(newString))
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Firestore", "DocumentSnapshot successfully updated!");
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error updating document", e);
+
+                                });
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure, e.g., show a toast message
-                        Log.w("Firestore", "Error updating document", e);
-                    }
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error finding document", e);
+
                 });
     }
     public void removeFromSiteList(String field, String siteId, String stringToRemove) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("sites").document(siteId)
-                .update(field, FieldValue.arrayRemove(stringToRemove))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Handle success, e.g., show a toast message
-                        System.out.println("Remove current list");
-                        Log.d("Firestore", "DocumentSnapshot successfully updated!");
+        db.collection("sites").whereEqualTo("siteId", siteId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        document.getReference().update(field, FieldValue.arrayRemove(stringToRemove))
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Firestore", "DocumentSnapshot successfully updated!");
+
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error updating document", e);
+
+                                });
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure, e.g., show a toast message
-                        Log.w("Firestore", "Error updating document", e);
-                    }
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error finding document", e);
+
                 });
     }
 }
