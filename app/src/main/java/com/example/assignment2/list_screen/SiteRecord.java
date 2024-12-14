@@ -45,7 +45,6 @@ public class SiteRecord extends AppCompatActivity {
         filter = findViewById(R.id.manageFilter);
         listName = findViewById(R.id.listName);
         listName.setText("Your sites");
-        filter.setVisibility(View.VISIBLE);
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,7 +134,7 @@ public class SiteRecord extends AppCompatActivity {
                         }, new SiteAdapter.onClickListener() {
                             @Override
                             public void OnClick(DonateSite site) {
-                                Intent intent = new Intent(SiteRecord.this, SiteDonorList.class);
+                                Intent intent = new Intent(SiteRecord.this, SiteVolunteerList.class);
                                 intent.putExtra("siteId", site.getSiteId());
                                 startActivity(intent);
                             }

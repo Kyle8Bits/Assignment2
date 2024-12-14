@@ -47,6 +47,9 @@
             android:name=".list_screen.SiteVolunteerList"
             android:exported="false"/>
         <activity
+            android:name=".list_screen.SiteDonorList"
+            android:exported="false"/>
+        <activity
             android:name=".main_screen.DonateMapScreen"
             android:exported="false"
             android:label="@string/title_activity_donate_map_screen" />

@@ -18,16 +18,18 @@ public class SiteDonorView extends RecyclerView.ViewHolder {
     public EditText amountCollected;
     public Button checkOut_button;
 
+    public LinearLayout phoneNumber;
+
 
     public SiteDonorView(@NonNull View itemView) {
         super(itemView);
         gID = itemView.findViewById(R.id.gID);
         firstName = itemView.findViewById(R.id.firstName);
         lastName = itemView.findViewById(R.id.lastName);
-        phoneParti = itemView.findViewById(R.id.phoneParti);
 
         bloodType_donor = itemView.findViewById(R.id.bloodType_donor);
-        birth_day = itemView.findViewById(R.id.birth_day);
+
+        phoneNumber = itemView.findViewById(R.id.phoneNumLinear);
 
         amountCollected = itemView.findViewById(R.id.amountCollected);
         checkOut_button = itemView.findViewById(R.id.checkOut_button);

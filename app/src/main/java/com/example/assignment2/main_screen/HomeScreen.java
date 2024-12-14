@@ -78,7 +78,6 @@ public class HomeScreen extends AppCompatActivity {
                             System.out.println(e.getMessage());
                         }
                     }
-
                     @Override
                     public void onFailure(Exception e) {
                         System.out.println("HomeScreen" +  "Error fetching user data:" + e);

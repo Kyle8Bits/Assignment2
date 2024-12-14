@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -81,9 +83,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/phoneNumLinear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -103,6 +108,39 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/red_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/red_line" />
+
+        <ImageView
+            android:id="@+id/green_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="150dp"
+            android:layout_height="3dp"
+            android:background="@drawable/green_line" />
+
+        <ImageView
+            android:id="@+id/dark_red_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="130dp"
+            android:layout_height="3dp"
+            android:background="@drawable/darkred_line" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/donorInfo"
@@ -136,30 +174,6 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/roboto_bold"
-                android:text="Day of birth:"
-                android:textColor="@color/red"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/birth_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_bold"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -182,7 +196,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Amount checkout" />
+                android:hint="Amount collected (mL)"
+                android:digits="0123456789"/>
 
             <Button
                 android:id="@+id/checkOut_button"

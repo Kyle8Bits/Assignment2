@@ -3,6 +3,7 @@ package com.example.assignment2.list_screen;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class SiteVolunteerList extends AppCompatActivity {
     FrameLayout goBack;
     Utils utils = new Utils();
     Application app = new Application();
-
+    SearchView searchBar;
     SiteVolunteerAdapter siteVolunteerAdapter;
 
     @Override
@@ -40,14 +41,11 @@ public class SiteVolunteerList extends AppCompatActivity {
                 finish();
             }
         });
+        searchBar = findViewById(R.id.manageFilter);
+        searchBar.setVisibility(View.VISIBLE);
+
 
         String siteID = getIntent().getStringExtra("siteId");
-
-        Toast.makeText(
-                SiteVolunteerList.this,
-                "Site ID: " + siteID,
-                Toast.LENGTH_SHORT
-        ).show();
 
         volunteerParticipant(siteID);
     }
@@ -61,6 +59,19 @@ public class SiteVolunteerList extends AppCompatActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(SiteVolunteerList.this));
                 siteVolunteerAdapter = new SiteVolunteerAdapter(SiteVolunteerList.this, volunteerRegisters);
                 recyclerView.setAdapter(siteVolunteerAdapter);
+                searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        siteVolunteerAdapter.filter(query);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        siteVolunteerAdapter.filter(newText);
+                        return false;
+                    }
+                });
             }
 
             @Override

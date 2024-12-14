@@ -268,7 +268,7 @@ public class Application {
         void onFailure(Exception e);
     }
 
-    //FEATCH volunteer register in a site
+    //FEATCH volunteer register by site id
     public void getVolunteerRegisterInSite(String site, final VolunteerFromSite callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("volunteer_registers").whereEqualTo("volunteerSiteId", site).get()
@@ -311,9 +311,50 @@ public class Application {
                     callback.onFailure(e);  // Notify failure
                 });
     }
-
     public interface VolunteerFromSite{
         void onSuccess(List<VolunteerRegister> volunteerRegisters);
+        void onFailure(Exception e);
+    }
+
+    //GET donate register by site id
+    public void getDonorRegisterInSite(String site, final DonorFromSite callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("donate_registers").whereEqualTo("donateSiteId", site).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<DonateRegister> donateRegisters = new ArrayList<>();
+                    queryDocumentSnapshots.forEach( documentSnapshot -> {
+                        try {
+                            Map<String, Object> data = documentSnapshot.getData();
+                            DonateRegister donateRegister = new DonateRegister(
+                                    data.get("donateSiteId").toString(),
+                                    data.get("userID").toString(),
+                                    data.get("timeRegister").toString(),
+                                    data.get("dateRegister").toString(),
+                                    data.get("bloodType").toString(),
+                                    data.get("lastName").toString(),
+                                    data.get("firstName").toString(),
+                                    data.get("dob").toString(),
+                                    data.get("governmentID").toString(),
+                                    documentSnapshot.getDouble("donationAmount"),
+                                    data.get("status").toString(),
+                                    data.get("siteName").toString(),
+                                    data.get("ID").toString()
+                            );
+                            donateRegisters.add(donateRegister);
+                        } catch (Exception e) {
+                            Log.e("Firestore", "Error parsing document: " + documentSnapshot.getId(), e);
+                        }
+                    });
+
+                    callback.onSuccess(donateRegisters);
+
+                }).addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error getting donations", e);
+                    callback.onFailure(e);  // Notify failure
+                });
+    }
+    public interface DonorFromSite{
+        void onSuccess(List<DonateRegister> donateRegisters);
         void onFailure(Exception e);
     }
 
@@ -546,7 +587,6 @@ public class Application {
     }
 
     //CLOSE a sites and other information
-
     public void closeSite(DonateSite site, final closeSiteCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("sites").whereEqualTo("siteId", site.getSiteId())
@@ -581,7 +621,6 @@ public class Application {
                     callback.onFailure(e);
                 });
     }
-
     private void updateStatusInCollections(FirebaseFirestore db, List<String> volunteerList, List<String> leftOverDonor, closeSiteCallback callback) {
         // Update status in volunteer_register collection
         for (String id : volunteerList) {
@@ -658,5 +697,26 @@ public class Application {
                     Log.w("Firestore", "Error finding document", e);
 
                 });
+    }
+    //UPDATE status of donate register by id
+    public void updateStatus(String registerId,double donationAmount, final UpdateStatusCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("donate_registers").whereEqualTo("ID", registerId)
+                .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                            documentSnapshot.getReference().update("status", "COMPLETED",  "donationAmount", donationAmount)
+                                    .addOnSuccessListener(aVoid -> callback.onSuccess())
+                                    .addOnFailureListener(callback::onFailure);
+                        }
+                    } else {
+                        callback.onFailure(new Exception("No documents found with ID: " + registerId));
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+    public interface UpdateStatusCallback {
+        void onSuccess();
+        void onFailure(Exception e);
     }
 }

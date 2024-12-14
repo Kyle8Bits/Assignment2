@@ -22,7 +22,7 @@ public class Utils {
         double total = 0;
 
         for (DonateRegister donateRegister : donateRegisters) {
-            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("DONE")) {
+            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("COMPLETED")) {
                 total += donateRegister.getDonationAmount();
             }
         }
@@ -34,7 +34,7 @@ public class Utils {
         int total = 0;
 
         for (DonateRegister donateRegister : donateRegisters) {
-            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("DONE")) {
+            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("COMPLETED")) {
                 total += 1;
             }
         }
@@ -134,6 +134,18 @@ public class Utils {
         for (DonateSite site : list) {
             if (site.getManagerUID().equals(userId)) {
                 result.add(site);
+            }
+        }
+        return result;
+    }
+
+    public List<DonateRegister> getUndoneDonor(List<DonateRegister> list){
+        List<DonateRegister> result = new ArrayList<>();
+        if(list != null){
+            for(DonateRegister register : list){
+                if(register.getStatus().equals("WAITING")){
+                    result.add(register);
+                }
             }
         }
         return result;
