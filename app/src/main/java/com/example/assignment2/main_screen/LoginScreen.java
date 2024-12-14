@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assignment2.Application;
 import com.example.assignment2.R;
+import com.example.assignment2.list_screen.AdminControllerList;
 import com.example.assignment2.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +42,11 @@ public class LoginScreen extends AppCompatActivity {
                    }
                    else if(userData.getUserType().equals("MANAGER")){
                        Intent intent = new Intent(LoginScreen.this, ManagerScreen.class);
+                       startActivity(intent);
+                       finish();
+                   }
+                   else if(userData.getUserType().equals("ADMIN")){
+                       Intent intent = new Intent(LoginScreen.this, AdminControllerList.class);
                        startActivity(intent);
                        finish();
                    }
@@ -106,6 +112,11 @@ public class LoginScreen extends AppCompatActivity {
                                                 }
                                                 if(userData.getUserType().equals("MANAGER")){
                                                     Intent intent = new Intent(LoginScreen.this, ManagerScreen.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                                if(userData.getUserType().equals("ADMIN")){
+                                                    Intent intent = new Intent(LoginScreen.this, AdminControllerList.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }

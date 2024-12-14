@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation("com.itextpdf:itextpdf:5.0.6")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

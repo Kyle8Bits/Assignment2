@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assignment2.R;
 
-public class VolunteerView extends RecyclerView.ViewHolder {
+    public class VolunteerView extends RecyclerView.ViewHolder {
 
     public TextView date, locationName, contact, status, time, address;
     public LinearLayout buttons, timeLayout;

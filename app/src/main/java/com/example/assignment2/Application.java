@@ -75,6 +75,46 @@ public class Application {
     }
 
     //-----------------------GET-------------------------------//
+    //FEATCH user by id
+    public void getUserByID(String userID, final UserByIDCallback callback) {
+
+            db.collection("users")
+                .document(userID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> data = documentSnapshot.getData();
+                        User retrievedUser = new User(
+                                data.get("firstName").toString(),
+                                data.get("lastName").toString(),
+                                data.get("email").toString(),
+                                data.get("phone").toString(),
+                                data.get("dob").toString(),
+                                data.get("idNumber").toString(),
+                                data.get("bloodType").toString(),
+                                data.get("userType").toString(),
+                                userID
+                        );
+
+                        this.currentUser = retrievedUser;
+
+                        callback.onSuccess(currentUser);  // Notify that data is ready
+                    } else {
+                        Log.d("Firestore", "No such document");
+                        callback.onFailure(new Exception("No data found"));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error
+                    Log.w("Firestore", "Error getting document", e);
+                    callback.onFailure(e);  // Notify failure
+                });
+    }
+    public interface UserByIDCallback {
+        void onSuccess(User userData);
+        void onFailure(Exception e);
+    }
+
     //FEATCH current user data
     public void getCurrentUserData(FirebaseUser user, final UserDataCallback callback) {
         if (user != null) {
