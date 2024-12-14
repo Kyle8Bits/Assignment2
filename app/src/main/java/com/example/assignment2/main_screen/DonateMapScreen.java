@@ -59,8 +59,11 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     Application app = new Application();
     Utils utils = new Utils();
     SearchView mapSearch;
+
     private String address, locationName;
-    private LatLng coor ;
+    private LatLng coor, currentCoor;
+
+    List<DonateSite> allSite = app.getAllDonateSite();
     String bloodType;
     private Marker currentMarker;
 
@@ -87,7 +90,15 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
             setUpManager();
         }
         else {
-            setUpManager();
+
+            Button nearest = findViewById(R.id.neart_button);
+            nearest.setVisibility(View.VISIBLE);
+            nearest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    redirectToNearestPlace(currentCoor.latitude, currentCoor.longitude, allSite);
+                }
+            });
 
         }
 
@@ -104,6 +115,29 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         else {
             setUpDonationLocation();
             donorSetOnMarker();
+
+        }
+    }
+
+    public void redirectToNearestPlace(double currentLat, double currentLng, List<DonateSite> places) {
+        DonateSite nearestPlace = null;
+        double minDistance = Double.MAX_VALUE;
+
+        for (DonateSite place : places) {
+            if(place.getBloodCollectType().equals(app.getCurrentUser().getBloodType())){
+                double distance = utils.calculateDistance(currentLat, currentLng, place.getLatitude(), place.getLongitude());
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestPlace = place;
+                }
+            }
+        }
+
+        if (nearestPlace != null) {
+            LatLng locationLatLng = new LatLng(nearestPlace.getLatitude(), nearestPlace.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationLatLng, 15));
+        }else {
+            Toast.makeText(DonateMapScreen.this, "No nearest place found", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -156,6 +190,8 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        if(site.getBloodCollectType().equals(app.getCurrentUser().getBloodType())){
                         DonateRegister donateRegister = new DonateRegister(site.getSiteId(), app.getCurrentUser().getUserId(), site.getDonationStartTime(),site.getDate(),
                                 site.getBloodCollectType(), app.getCurrentUser().getLastName(), app.getCurrentUser().getFirstName(), app.getCurrentUser().getDob(),
                                 app.getCurrentUser().getIdNumber(), 0, "WAITING", site.getName(),"");
@@ -163,6 +199,10 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                         registerDonate(donateRegister, site.getSiteId());
 
                         createForm.dismiss();
+                        }
+                        else {
+                            Toast.makeText(DonateMapScreen.this, "Your blood type don't match this site", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -324,7 +364,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                     mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location")
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-
+                    currentCoor = currentLocation;
 
                     Toast.makeText(DonateMapScreen.this,"Your location", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -417,7 +457,6 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     }
 
     public void setUpDonationLocation() {
-        List<DonateSite> allSite = app.getAllDonateSite();
 
         if (allSite == null || allSite.isEmpty()) {
             Log.d("setUpDonationLocation", "No donation sites available.");

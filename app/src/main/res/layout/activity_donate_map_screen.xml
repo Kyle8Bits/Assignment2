@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".main_screen.DonateMapScreen">
 
+    <Button
+        android:id="@+id/neart_button"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="308dp"
+        android:layout_marginBottom="102dp"
+        android:elevation="6dp"
+        android:text="Nearest"
+        android:textAllCaps="false"
+        android:visibility="gone" />
+
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
