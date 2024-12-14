@@ -1,5 +1,6 @@
 package com.example.assignment2.list_screen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -27,6 +28,7 @@ public class SiteDonorList extends AppCompatActivity {
     Application app = new Application();
     SearchView searchBar;
     SiteDonorAdapter siteDonorAdapter;
+    TextView goToVolunteers;
 
     @Override
     protected  void onCreate(Bundle savedInstanceState){
@@ -45,7 +47,19 @@ public class SiteDonorList extends AppCompatActivity {
         searchBar = findViewById(R.id.manageFilter);
         searchBar.setVisibility(View.VISIBLE);
 
+        goToVolunteers = findViewById(R.id.goToVolunteerList);
+        goToVolunteers.setVisibility(View.VISIBLE);
+
         String siteID = getIntent().getStringExtra("siteId");
+
+        goToVolunteers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SiteDonorList.this, SiteVolunteerList.class);
+                intent.putExtra("siteId", siteID);
+                startActivity(intent);
+            }
+        });
 
         getSiteDonorData(siteID);
 
@@ -56,7 +70,6 @@ public class SiteDonorList extends AppCompatActivity {
         app.getDonorRegisterInSite(id, new Application.DonorFromSite(){
             @Override
             public void onSuccess(List<DonateRegister> donateRegisters) {
-                System.out.println(donateRegisters.get(0).getSiteName());
                 RecyclerView recyclerView = findViewById(R.id.donateRCV);
                 recyclerView.setLayoutManager(new LinearLayoutManager(SiteDonorList.this));
                 siteDonorAdapter = new SiteDonorAdapter(SiteDonorList.this,utils.getUndoneDonor(donateRegisters), new SiteDonorAdapter.OnCheckOutListener() {

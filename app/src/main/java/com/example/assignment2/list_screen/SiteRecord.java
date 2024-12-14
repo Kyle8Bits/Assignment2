@@ -134,7 +134,7 @@ public class SiteRecord extends AppCompatActivity {
                         }, new SiteAdapter.onClickListener() {
                             @Override
                             public void OnClick(DonateSite site) {
-                                Intent intent = new Intent(SiteRecord.this, SiteVolunteerList.class);
+                                Intent intent = new Intent(SiteRecord.this, SiteDonorList.class);
                                 intent.putExtra("siteId", site.getSiteId());
                                 startActivity(intent);
                             }
