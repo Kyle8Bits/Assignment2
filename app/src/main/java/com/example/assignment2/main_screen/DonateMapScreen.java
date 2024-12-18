@@ -190,8 +190,6 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        if(site.getBloodCollectType().equals(app.getCurrentUser().getBloodType())){
                         DonateRegister donateRegister = new DonateRegister(site.getSiteId(), app.getCurrentUser().getUserId(), site.getDonationStartTime(),site.getDate(),
                                 site.getBloodCollectType(), app.getCurrentUser().getLastName(), app.getCurrentUser().getFirstName(), app.getCurrentUser().getDob(),
                                 app.getCurrentUser().getIdNumber(), 0, "WAITING", site.getName(),"");
@@ -199,10 +197,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                         registerDonate(donateRegister, site.getSiteId());
 
                         createForm.dismiss();
-                        }
-                        else {
-                            Toast.makeText(DonateMapScreen.this, "Your blood type don't match this site", Toast.LENGTH_SHORT).show();
-                        }
+
                     }
                 });
 

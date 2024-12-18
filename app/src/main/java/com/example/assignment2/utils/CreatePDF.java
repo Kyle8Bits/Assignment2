@@ -44,7 +44,7 @@ public class CreatePDF {
                 "Date",
                 "Start time",
                 "End time",
-                "Type collect",
+                "Priority blood type",
                 "Total collect",
                 "Total donor",
                 "Total volunteer",
