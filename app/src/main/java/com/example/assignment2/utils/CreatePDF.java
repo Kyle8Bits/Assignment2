@@ -24,13 +24,15 @@ public class CreatePDF {
         // Create a new document
         PdfDocument document = new PdfDocument();
 
-        // Create a page description
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+        // Define constants
+        int pageWidth = 595;
+        int pageHeight = 842;
+        int margin = 50;
+        int rowHeight = 50;
+        int columnWidth = 200;
+        int padding = 10;
+        int contentHeight = pageHeight - 2 * margin; // Available height for content
 
-        // Start a page
-        PdfDocument.Page page = document.startPage(pageInfo);
-
-        Canvas canvas = page.getCanvas();
         TextPaint paint = new TextPaint();
         Paint borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
@@ -44,45 +46,76 @@ public class CreatePDF {
                 "Date",
                 "Start time",
                 "End time",
-                "Priority blood type",
+
+                "A collected",
+                "A- collected",
+                "B collected",
+                "B- collected",
+                "AB collected",
+                "AB- collected",
+                "O collected",
+                "O- collected",
+
                 "Total collect",
                 "Total donor",
                 "Total volunteer",
                 "Manager",
                 "Manager phone"};
 
-        // Set the starting position for the table
-        int x = 100;
-        int y = 120;
-        int rowHeight = 50;
-        int columnWidth = 200;
-        int padding = 10;
+        // Track the Y position
+        int y = margin;
+        int currentPage = 1;
 
-        drawText(canvas, "Report from " + data[1] + " donation site", 180, 50, 500, paint);
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPage).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
 
-        drawText(canvas, "Date: " + data[3], 250, 80, 500, paint);
+        // Draw the title and date
+        drawText(canvas, "Report from " + data[1] + " donation site", margin, y, pageWidth - 2 * margin, paint);
+        y += rowHeight;
+        drawText(canvas, "Date: " + data[3], margin, y, pageWidth - 2 * margin, paint);
+        y += rowHeight;
 
-
-        // Draw the table headers
+        // Draw the headers and data
         for (int i = 0; i < headers.length; i++) {
-            drawText(canvas, headers[i], x + padding, y + (i * rowHeight) + padding + 10, columnWidth, paint);
-            // Draw the border for the header cell
-            canvas.drawRect(x, y + (i * rowHeight), x + columnWidth, y + ((i + 1) * rowHeight), borderPaint);
+            // Check if the content exceeds the page height
+            if (y + rowHeight > contentHeight + margin) {
+                // Finish the current page
+                document.finishPage(page);
+
+                // Start a new page
+                currentPage++;
+                pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPage).create();
+                page = document.startPage(pageInfo);
+                canvas = page.getCanvas();
+                y = margin;
+
+                // Redraw headers on the new page
+                for (int j = i; j < headers.length; j++) {
+                    drawText(canvas, headers[j], margin + (j * columnWidth) + padding, y + padding + 10, columnWidth, paint);
+                    canvas.drawRect(margin + (j * columnWidth), y, margin + (j + 1) * columnWidth, y + rowHeight, borderPaint);
+                }
+                y += rowHeight; // Move Y position below headers
+            }
+
+            // Draw the header text
+            drawText(canvas, headers[i], margin + padding, y + padding + 10, columnWidth, paint);
+            canvas.drawRect(margin, y, margin + columnWidth, y + rowHeight, borderPaint);
+
+            // Draw the corresponding data
+            drawText(canvas, data[i], margin + columnWidth + padding, y + padding + 10, columnWidth, paint);
+            canvas.drawRect(margin + columnWidth, y, margin + 2 * columnWidth, y + rowHeight, borderPaint);
+
+            y += rowHeight; // Move Y position for the next row
         }
 
-        // Draw the table data
-        for (int i = 0; i < data.length; i++) {
-            drawText(canvas, data[i], x + columnWidth + padding, y + (i * rowHeight) + padding + 10, columnWidth, paint);
-            // Draw the border for the data cell
-            canvas.drawRect(x + columnWidth, y + (i * rowHeight), x + 2 * columnWidth, y + ((i + 1) * rowHeight), borderPaint);
-        }
-
-        // Finish the page
+        // Finish the last page
         document.finishPage(page);
+
+        // Save the document to a file
         String fileName = removeVietnameseSymbols(donateSite.getName());
-        String site = fileName.replace(" ","_");
+        String site = fileName.replace(" ", "_");
         String date = donateSite.getDate().replace("/", "_");
-        // Save the document in the app-specific storage directory
         File file = new File(context.getExternalFilesDir(null), site + "_" + date + ".pdf");
 
         try {

@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,7 +46,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallback {
@@ -124,7 +122,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         double minDistance = Double.MAX_VALUE;
 
         for (DonateSite place : places) {
-            if(place.getBloodCollectType().equals(app.getCurrentUser().getBloodType())){
+            if(!place.getStatus().equals("CLOSE")) {
                 double distance = utils.calculateDistance(currentLat, currentLng, place.getLatitude(), place.getLongitude());
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -160,7 +158,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
     }
 
     public void showDonorPopup(DonateSite site ){
-        TextView name, address, timeStart, timeEnd, bloodType, amountCl;
+        TextView name, address, timeStart, timeEnd, date, amountCl;
         Button donateRe, volunteer;
 
         Dialog createForm = new Dialog(this);
@@ -174,7 +172,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         address = createForm.findViewById(R.id.addressPopup);
         timeStart = createForm.findViewById(R.id.startTimePopup);
         timeEnd = createForm.findViewById(R.id.endTimePopup);
-        bloodType = createForm.findViewById(R.id.bloodTypePopup);
+        date = createForm.findViewById(R.id.date_to_donate);
         amountCl = createForm.findViewById(R.id.amountPopup);
 
         createForm.show();
@@ -183,7 +181,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         address.setText(site.getAddress());
         timeStart.setText(site.getDonationStartTime());
         timeEnd.setText(site.getDonationEndTime());
-        bloodType.setText(site.getBloodCollectType());
+        date.setText(site.getDate());
         amountCl.setText(site.getAmountOfBlood() + " mL");
 
         donateRe.setOnClickListener(
@@ -191,7 +189,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                     @Override
                     public void onClick(View view) {
                         DonateRegister donateRegister = new DonateRegister(site.getSiteId(), app.getCurrentUser().getUserId(), site.getDonationStartTime(),site.getDate(),
-                                site.getBloodCollectType(), app.getCurrentUser().getLastName(), app.getCurrentUser().getFirstName(), app.getCurrentUser().getDob(),
+                                app.getCurrentUser().getBloodType(), app.getCurrentUser().getLastName(), app.getCurrentUser().getFirstName(), app.getCurrentUser().getDob(),
                                 app.getCurrentUser().getIdNumber(), 0, "WAITING", site.getName(),"");
 
                         registerDonate(donateRegister, site.getSiteId());
@@ -279,7 +277,6 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         date = createForm.findViewById(R.id.dateCl);
         start = createForm.findViewById(R.id.startTCL);
         end = createForm.findViewById(R.id.endTCL);
-        bloodType = createForm.findViewById(R.id.bloodTypeCl);
         create = createForm.findViewById(R.id.createDonateDrive);
 
         createForm.show();
@@ -288,15 +285,13 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
         end.setOnClickListener(v -> utils.showTimePicker(end, DonateMapScreen.this) );
         start.setOnClickListener(v -> utils.showTimePicker(start, DonateMapScreen.this) );
 
-        setupBloodTypeSpinner(bloodType);
 
         nameLocation.setText(nameOfPlace);
         addressLocation.setText(address);
 
         create.setOnClickListener(v -> {
             if (amount.getText().toString().isEmpty() || date.getText().toString().isEmpty() ||
-                    start.getText().toString().isEmpty() || end.getText().toString().isEmpty() ||
-                    bloodType.getSelectedItem().toString().equals("Select Blood Type")) {
+                    start.getText().toString().isEmpty() || end.getText().toString().isEmpty()) {
                 Toast.makeText(DonateMapScreen.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
 
             } else if (!utils.isTimeLogical(start.getText().toString(), end.getText().toString())) {
@@ -305,7 +300,7 @@ public class DonateMapScreen extends FragmentActivity implements OnMapReadyCallb
                 DonateSite site = new DonateSite(locationName, address, coordinate.latitude, coordinate.longitude,
                         app.getCurrentUser().getPhone(), app.getCurrentUser().getUserId(), date.getText().toString(),
                         "Open Register", null, null, start.getText().toString(), end.getText().toString(),
-                        Double.parseDouble(amount.getText().toString()), bloodType.getSelectedItem().toString()
+                        Double.parseDouble(amount.getText().toString())
                         ,"");
                 createDonateSite(site);
             }

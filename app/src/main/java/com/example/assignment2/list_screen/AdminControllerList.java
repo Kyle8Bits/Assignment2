@@ -136,34 +136,44 @@ public class AdminControllerList extends AppCompatActivity {
         void onDataReady(String[] data);
     }
     public void fromDataToPDF(DonateSite donateSite, PDFDataCallback callback){
-        String[] data = new String[12];
+        String[] data = new String[19];
         data[0] = donateSite.getSiteId();
         data[1] = donateSite.getName();
         data[2] = donateSite.getAddress();
         data[3] = donateSite.getDate();
         data[4] = donateSite.getDonationStartTime();
-        data[5] = donateSite.getDonationEndTime(); // end time
-        data[6] = donateSite.getBloodCollectType();
+        data[5] = donateSite.getDonationEndTime();// end time
 
-        data[7] = getTotalBlood(donateSite);
-        data[8] = getTotalDonor(donateSite);
-        data[9] = String.valueOf(donateSite.getDonationRegisterIds().size());
+        data[6] = getTotalBloodType(donateSite, "A+");
+        data[7] = getTotalBloodType(donateSite, "A-");
+        data[8] = getTotalBloodType(donateSite, "B+");
+        data[9] = getTotalBloodType(donateSite, "B-");
+        data[10] = getTotalBloodType(donateSite, "AB+");
+        data[11] = getTotalBloodType(donateSite, "AB-");
+        data[12] = getTotalBloodType(donateSite, "O+");
+        data[13] = getTotalBloodType(donateSite, "O-");
+
+
+        data[14] = getTotalBlood(donateSite);
+        data[15] = getTotalDonor(donateSite);
+        data[16] = String.valueOf(donateSite.getVolunteerRegisterIds().size());
+        System.out.println(String.valueOf(donateSite.getVolunteerRegisterIds().size()));
 
         getManager(donateSite, new ManagerCallback() {
             @Override
             public void onSuccess(String managerName) {
-                data[10] = managerName;
+                data[17] = managerName;
                 callback.onDataReady(data);
             }
 
             @Override
             public void onFailure(Exception e) {
-                data[10] = "Unknown";
+                data[17] = "Unknown";
                 callback.onDataReady(data);
             }
         });
 
-        data[11] = donateSite.getPhone();
+        data[18] = donateSite.getPhone();
     }
 
     public String getTotalBlood(DonateSite donateSite){
@@ -175,6 +185,23 @@ public class AdminControllerList extends AppCompatActivity {
         for(String donorId : donorIds){
             for(DonateRegister donor : donorRegistration){
                 if(donorId.equals(donor.getId())){
+                    total += donor.getDonationAmount();
+                }
+            }
+        }
+        result = String.valueOf(total);
+        return result;
+    }
+
+    public String getTotalBloodType(DonateSite donateSite, String type){
+        String result;
+        List<String> donorIds = donateSite.getDonationRegisterIds();
+
+        double total = 0;
+
+        for(String donorId : donorIds){
+            for(DonateRegister donor : donorRegistration){
+                if(donorId.equals(donor.getId()) && donor.getBloodType().equals(type) ){
                     total += donor.getDonationAmount();
                 }
             }

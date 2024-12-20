@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.assignment2.R;
 
 public class SiteView extends RecyclerView.ViewHolder{
-    public TextView location, time, blood, address, cancelButton;
+    public TextView location, time, date, address;
     public Button button, close;
     public LinearLayout card;
     public SiteView(@NonNull View itemView) {
@@ -19,7 +19,7 @@ public class SiteView extends RecyclerView.ViewHolder{
 
         location = itemView.findViewById(R.id.locationBook);
         time = itemView.findViewById(R.id.timeStart_End);
-        blood = itemView.findViewById(R.id.bloodMn);
+        date = itemView.findViewById(R.id.date_created);
         address = itemView.findViewById(R.id.addressMn);
         close = itemView.findViewById(R.id.closeSite);
         card = itemView.findViewById(R.id.card_site_list);

@@ -281,7 +281,6 @@ public class Application {
                                         data.get("start").toString(),
                                         data.get("end").toString(),
                                         (double) data.get("amount"),
-                                        data.get("bloodType").toString(),
                                         data.get("siteId").toString()
                                 );
                                 donateSites.add(donateSite);
@@ -416,7 +415,6 @@ public class Application {
         site.put("date", newSite.getDate());
         site.put("start", newSite.getDonationStartTime( ));
         site.put("end", newSite.getDonationEndTime());
-        site.put("bloodType", newSite.getBloodCollectType());
 
         site.put("latitude", newSite.getLatitude());
         site.put("longitude", newSite.getLongitude());
@@ -640,11 +638,15 @@ public class Application {
 
                         if (documentSnapshot.contains("currentRegister")) {
                             List<String> currentRegister = (List<String>) documentSnapshot.get("currentRegister");
-                            leftOverDonor.addAll(new ArrayList<>(currentRegister)); // Make a deep copy
+                            if (currentRegister != null) { // Check for null
+                                leftOverDonor.addAll(new ArrayList<>(currentRegister)); // Make a deep copy
+                            }
                         }
                         if (documentSnapshot.contains("currentVolunteer")) {
                             List<String> currentVolunteer = (List<String>) documentSnapshot.get("currentVolunteer");
-                            volunteerList.addAll(new ArrayList<>(currentVolunteer)); // Make a deep copy
+                            if (currentVolunteer != null) {
+                                volunteerList.addAll(new ArrayList<>(currentVolunteer));
+                            }
                         }
                         documentReference.update("status", "CLOSE")
                                 .addOnSuccessListener(aVoid -> {
@@ -745,7 +747,14 @@ public class Application {
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                            documentSnapshot.getReference().update("status", "COMPLETED",  "donationAmount", donationAmount)
+                            Double currentDonationAmount = documentSnapshot.getDouble("donationAmount");
+                            if (currentDonationAmount == null) {
+                                currentDonationAmount = 0.0; // Default to 0 if the field is missing
+                            }
+                            double newDonationAmount = currentDonationAmount + donationAmount;
+
+                            documentSnapshot.getReference()
+                                    .update("status", "COMPLETED", "donationAmount", newDonationAmount)
                                     .addOnSuccessListener(aVoid -> callback.onSuccess())
                                     .addOnFailureListener(callback::onFailure);
                         }

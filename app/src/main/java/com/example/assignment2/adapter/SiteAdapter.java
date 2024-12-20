@@ -51,7 +51,7 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteView> {
         DonateSite site = siteList.get(position);
         holder.location.setText(siteList.get(position).getName());
         holder.time.setText(siteList.get(position).getDonationStartTime() + " - " + siteList.get(position).getDonationEndTime());
-        holder.blood.setText(String.valueOf(siteList.get(position).getBloodCollectType()));
+        holder.date.setText(String.valueOf(siteList.get(position).getDate()));
         holder.address.setText(siteList.get(position).getAddress());
 
         holder.card.setOnClickListener(new View.OnClickListener() {

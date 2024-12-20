@@ -20,7 +20,6 @@ public class DonateSite {
     private String donationEndTime;
 
     private double amountOfBlood;
-    private String bloodCollectType;
 
     private String siteId;
 
@@ -28,7 +27,7 @@ public class DonateSite {
 
     }
 
-    public DonateSite(String name, String address, double latitude, double longitude, String phone, String managerUID, String date, String status, List<String> donationRegisterIds, List<String> volunteerRegisterIds, String donationStartTime, String donationEndTime, double amountOfBlood, String bloodCollectType, String siteId) {
+    public DonateSite(String name, String address, double latitude, double longitude, String phone, String managerUID, String date, String status, List<String> donationRegisterIds, List<String> volunteerRegisterIds, String donationStartTime, String donationEndTime, double amountOfBlood, String siteId) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;
@@ -42,7 +41,6 @@ public class DonateSite {
         this.donationStartTime = donationStartTime;
         this.donationEndTime = donationEndTime;
         this.amountOfBlood = amountOfBlood;
-        this.bloodCollectType = bloodCollectType;
         this.siteId = siteId;
     }
 
@@ -73,14 +71,6 @@ public class DonateSite {
     }
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getBloodCollectType() {
-        return bloodCollectType;
-    }
-
-    public void setBloodCollectType(String bloodCollectType) {
-        this.bloodCollectType = bloodCollectType;
     }
 
     public String getName() {

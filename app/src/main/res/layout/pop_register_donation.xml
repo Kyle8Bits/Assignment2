@@ -111,12 +111,12 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Priority blood needed:"
+                android:text="Date"
                 android:textColor="@color/red"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/bloodTypePopup"
+                android:id="@+id/date_to_donate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
