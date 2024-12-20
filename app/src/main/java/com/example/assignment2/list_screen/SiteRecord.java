@@ -95,6 +95,7 @@ public class SiteRecord extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(String documentId) {
                                             Toast.makeText(SiteRecord.this,"Successfully volunteer", Toast.LENGTH_SHORT).show();
+                                            finish();
                                         }
                                         @Override
                                         public void onFailure(Exception e) {

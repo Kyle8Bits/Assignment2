@@ -34,7 +34,7 @@ public class Utils {
         int total = 0;
 
         for (DonateRegister donateRegister : donateRegisters) {
-            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("COMPLETED")) {
+            if (donateRegister.getUserID().equals(ID) && donateRegister.getStatus().equals("COMPLETED") && donateRegister.getDonationAmount() != 0.0) {
                 total += 1;
             }
         }
