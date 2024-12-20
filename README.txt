@@ -9,6 +9,7 @@
     Application name: Blood Donations Station
 
 2 Feature list:
+
     Overall:
         Login
         Register
@@ -41,6 +42,7 @@
         Generate PDF report of donation sites
 
 3 Technologies used:
+
     Android library:
         Necessary library from android studio for building the application.
 
@@ -57,6 +59,7 @@
     ItextPDF: Library used for helping generate PDF report.
 
 4 Drawbacks:
+
     Absence of special account registration (manger, admin) method, manager and admin account are
     currently pre-define by modifying database.
     Absence of modification user profile (I though it would be reasonable if not allow user to modify
