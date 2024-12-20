@@ -1,12 +1,14 @@
-Student Information: Mai Dang Khoa
-Student ID: s3974876
-Course: COSC2657 - Android Development
-Lecturer: Mr. Minh Vu Thanh
+1 Introduction
 
-Assessment: Assignment 2 - Blood Donation Android App
-Application name: Blood Donations Station
+    Student Information: Mai Dang Khoa
+    Student ID: s3974876
+    Course: COSC2657 - Android Development
+    Lecturer: Mr. Minh Vu Thanh
 
-Feature list:
+    Assessment: Assignment 2 - Blood Donation Android App
+    Application name: Blood Donations Station
+
+2 Feature list:
     Overall:
         Login
         Register
@@ -29,15 +31,16 @@ Feature list:
         Create donation drive with specific information.
         Checking the list of mange donation site.
         Checking the list of donor and volunteer on that site.
-        Checkout a donor when they finished the donation on a site (including the blood have been donated by donor).
+        Checkout a donor when they finished the donation on a site (including the blood have been
+        donated by donor).
         Close a donation site, the late donor will be mark as finished without any credit.
         Volunteer for manger's donation sites.
         Cancel the volunteer request on manger's donation sites.
 
     Admin:
         Generate PDF report of donation sites
-s
-Technologies used:
+
+3 Technologies used:
     Android library:
         Necessary library from android studio for building the application.
 
@@ -53,6 +56,9 @@ Technologies used:
 
     ItextPDF: Library used for helping generate PDF report.
 
-Drawbacks:
-    Absence of special account registration (manger, admin) method, manager and admin account are currently pre-define by modifying database.
+4 Drawbacks:
+    Absence of special account registration (manger, admin) method, manager and admin account are
+    currently pre-define by modifying database.
+    Absence of modification user profile (I though it would be reasonable if not allow user to modify
+    the health information, especially blood type and ID government number
 
