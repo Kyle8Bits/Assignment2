@@ -124,6 +124,7 @@ public class LoginScreen extends AppCompatActivity {
                                         }
                                         @Override
                                         public void onFailure(Exception e) {
+                                            Toast.makeText(LoginScreen.this, "User data does not exist.", Toast.LENGTH_SHORT).show();
                                             System.out.println("HomeScreen" +  "Error fetching user data:" + e);
                                         }
                                     });

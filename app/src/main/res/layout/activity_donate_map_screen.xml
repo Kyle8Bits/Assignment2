@@ -8,15 +8,17 @@
 
     <Button
         android:id="@+id/neart_button"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="308dp"
-        android:layout_marginBottom="102dp"
+        android:layout_marginEnd="270dp"
+        android:layout_marginBottom="120dp"
+        android:backgroundTint="@color/red"
         android:elevation="6dp"
         android:text="Nearest"
         android:textAllCaps="false"
+        android:textColor="@color/white"
         android:visibility="gone" />
 
     <fragment

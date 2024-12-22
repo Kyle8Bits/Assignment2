@@ -29,7 +29,7 @@ public class CreatePDF {
         int pageHeight = 842;
         int margin = 50;
         int rowHeight = 50;
-        int columnWidth = 200;
+        int columnWidth = 260;
         int padding = 10;
         int contentHeight = pageHeight - 2 * margin; // Available height for content
 
@@ -99,12 +99,12 @@ public class CreatePDF {
             }
 
             // Draw the header text
-            drawText(canvas, headers[i], margin + padding, y + padding + 10, columnWidth, paint);
-            canvas.drawRect(margin, y, margin + columnWidth, y + rowHeight, borderPaint);
+            drawText(canvas, headers[i], margin + padding, y + padding + 10, columnWidth-100, paint);
+            canvas.drawRect(margin, y, margin + columnWidth-100, y + rowHeight, borderPaint);
 
             // Draw the corresponding data
-            drawText(canvas, data[i], margin + columnWidth + padding, y + padding + 10, columnWidth, paint);
-            canvas.drawRect(margin + columnWidth, y, margin + 2 * columnWidth, y + rowHeight, borderPaint);
+            drawText(canvas, data[i], margin + columnWidth + padding -100, y + padding, columnWidth+80, paint);
+            canvas.drawRect(margin + columnWidth -100 , y, margin + 2 * columnWidth, y + rowHeight, borderPaint);
 
             y += rowHeight; // Move Y position for the next row
         }
